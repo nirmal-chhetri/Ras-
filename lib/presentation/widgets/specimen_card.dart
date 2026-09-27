@@ -235,8 +235,8 @@ class _SpecimenCardState extends State<SpecimenCard> {
 
                     // Top-right Tactile Bookmark Pin Icon
                     Positioned(
-                      top: 8,
-                      right: 8,
+                      top: 6,
+                      right: 6,
                       child: GestureDetector(
                         onTap: () {
                           HapticFeedback.mediumImpact();
@@ -244,7 +244,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: specimen.isUserPinned
                                 ? theme.accentGlow
@@ -259,7 +259,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
                             specimen.isUserPinned
                                 ? Icons.bookmark
                                 : Icons.bookmark_border,
-                            size: 13,
+                            size: 11,
                             color: Colors.white,
                           ),
                         ),
@@ -269,11 +269,8 @@ class _SpecimenCardState extends State<SpecimenCard> {
                 ),
 
                 // 2. Editorial Monograph Typography Block
-                // SCIENTIFIC PRINCIPLE: Gestalt Law of Proximity (Wertheimer, 1923) & Cognitive Load Theory (Sweller, 1988)
-                // Expanded internal padding (24px / 1.5rem equivalent) provides generous whitespace boundaries,
-                // chunking information into discrete, easily digestible cognitive nodes and preventing sensory overwhelm.
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -287,28 +284,25 @@ class _SpecimenCardState extends State<SpecimenCard> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 9.0,
+                                fontSize: 8.0,
                                 fontWeight: FontWeight.w700,
-                                letterSpacing: 1.1,
+                                letterSpacing: 1.0,
                                 color: theme.textSecondary,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          const SizedBox(width: 4),
                           Text(
                             '\$${specimen.estimatedUsd.toStringAsFixed(0)}',
                             style: GoogleFonts.spaceGrotesk(
-                              fontSize: 10.5,
+                              fontSize: 9.5,
                               fontWeight: FontWeight.w700,
                               color: theme.accentGlow,
                             ),
                           ),
                         ],
                       ),
-                      // SCIENTIFIC PRINCIPLE: Semantic Information Disambiguation
-                      // 16px inter-element gap ensures visual hierarchy separation between
-                      // functional metadata (maker/price) and primary editorial semantic content (title).
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 5),
 
                       // Specimen Title (Editorial Serif)
                       Text(
@@ -316,7 +310,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.playfairDisplay(
-                          fontSize: 13.5,
+                          fontSize: 12.0,
                           fontWeight: FontWeight.w600,
                           color: theme.textPrimary,
                           letterSpacing: -0.2,

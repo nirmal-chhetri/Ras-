@@ -494,17 +494,24 @@ class _StudioDrawerState extends State<StudioDrawer> {
 
                 // Curated Moodboard Grid
                 Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.78,
-                    ),
-                    itemCount: pinned.length,
-                    itemBuilder: (context, index) {
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final int crossAxisCount = constraints.maxWidth >= 1000
+                          ? 4
+                          : constraints.maxWidth >= 600
+                              ? 3
+                              : 2;
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.78,
+                        ),
+                        itemCount: pinned.length,
+                        itemBuilder: (context, index) {
                       final item = pinned[index];
                       return GestureDetector(
                         onTap: () {
@@ -635,8 +642,10 @@ class _StudioDrawerState extends State<StudioDrawer> {
                         ),
                       );
                     },
-                  ),
-                ),
+                  );
+                },
+              ),
+            ),
               ],
             ),
     );
