@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aether_commerce/models/specimen.dart';
 import 'package:aether_commerce/core/theme.dart';
+import 'package:aether_commerce/core/audio_controller.dart';
 import 'package:aether_commerce/core/gateways/provenance_gateway.dart';
 import 'package:aether_commerce/presentation/screens/specimen_detail_screen.dart';
 
@@ -111,10 +112,15 @@ void main() {
       expect(find.text('Visit Studio Arhoj Store'), findsOneWidget);
       expect(find.text('https://arhoj.com'), findsOneWidget);
 
-      // 3. Confirm visit official store intent
+      // 3. Confirm visit official store intent with Labor Illusion verification
       final proceedButton = find.text('VISIT OFFICIAL STORE ➔');
       expect(proceedButton, findsOneWidget);
       await tester.tap(proceedButton);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Verify Labor Illusion visual feedback is actively displayed during verification
+      expect(find.text('CONNECTING TO ATELIER...'), findsOneWidget);
+
       await tester.pumpAndSettle();
 
       // 4. Verify intent was launched via Provenance Gateway

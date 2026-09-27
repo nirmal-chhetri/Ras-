@@ -43,6 +43,22 @@ void main() {
       controller.dispose();
     });
 
+    test('AudioEngineController psychoacoustic ducking and restore state transitions', () async {
+      final controller = AudioEngineController();
+
+      expect(controller.isDucked, false);
+
+      // Duck audio down to 20%
+      await controller.duckAudio(duckRatio: 0.20, durationMs: 20);
+      expect(controller.isDucked, true);
+
+      // Restore audio
+      await controller.restoreAudio(durationMs: 20);
+      expect(controller.isDucked, false);
+
+      controller.dispose();
+    });
+
     testWidgets('AudioDock renders telemetry, waveform, and responds to volume tap', (WidgetTester tester) async {
       final controller = AudioEngineController();
 

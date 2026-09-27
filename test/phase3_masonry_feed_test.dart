@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:aether_commerce/models/specimen.dart';
 import 'package:aether_commerce/core/theme.dart';
 import 'package:aether_commerce/core/theme_manager.dart';
@@ -44,6 +45,12 @@ void main() {
 
       expect(themeManager.animationDuration, const Duration(milliseconds: 250));
       expect(themeManager.animationCurve, Curves.fastOutSlowIn);
+    });
+
+    test('AetherTheme slateCharcoal implements anti-halation contrast', () {
+      const theme = AetherTheme.slateCharcoal;
+      expect(theme.textPrimary, const Color(0xFFEAEAEA));
+      expect(theme.bgSurface, const Color(0xFF1A1C23));
     });
 
     testWidgets('SpecimenCard displays maker, title, price and handles pin toggle', (WidgetTester tester) async {
