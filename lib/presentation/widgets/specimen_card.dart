@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/specimen.dart';
 import '../../core/theme.dart';
+import '../../core/audio_controller.dart';
 import '../screens/specimen_detail_screen.dart';
 
 /// ============================================================================
@@ -59,12 +60,16 @@ class SpecimenCard extends StatefulWidget {
   /// Position index in the masonry grid, used to stagger entrance animations.
   final int index;
 
+  /// Optional ambient audio controller forwarded to the detail monograph for ducking.
+  final AudioEngineController? audioController;
+
   const SpecimenCard({
     super.key,
     required this.specimen,
     required this.theme,
     required this.onPinToggle,
     this.index = 0,
+    this.audioController,
   });
 
   @override
@@ -110,6 +115,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
                       specimen: specimen,
                       theme: theme,
                       onPinToggle: widget.onPinToggle,
+                      audioController: widget.audioController,
                     ),
                   );
                 },
@@ -132,8 +138,11 @@ class _SpecimenCardState extends State<SpecimenCard> {
                 BoxShadow(
                   color:
                       Colors.black.withValues(alpha: _isHovered ? 0.18 : 0.06),
-                  blurRadius: _isHovered ? 16 : 8,
-                  offset: Offset(0, _isHovered ? 6 : 3),
+                  // Visual depth cue (Gibson's Ecological Affordance, 1979):
+                  // Increased blur (20px) and vertical translation (8px) simulate real-world
+                  // physical elevation above the canvas surface, signalling tactile interactability.
+                  blurRadius: _isHovered ? 20 : 8,
+                  offset: Offset(0, _isHovered ? 8 : 3),
                 ),
               ],
             ),
@@ -217,8 +226,11 @@ class _SpecimenCardState extends State<SpecimenCard> {
                 ),
 
                 // 2. Editorial Monograph Typography Block
+                // SCIENTIFIC PRINCIPLE: Gestalt Law of Proximity (Wertheimer, 1923) & Cognitive Load Theory (Sweller, 1988)
+                // Expanded internal padding (24px / 1.5rem equivalent) provides generous whitespace boundaries,
+                // chunking information into discrete, easily digestible cognitive nodes and preventing sensory overwhelm.
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -250,7 +262,10 @@ class _SpecimenCardState extends State<SpecimenCard> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      // SCIENTIFIC PRINCIPLE: Semantic Information Disambiguation
+                      // 16px inter-element gap ensures visual hierarchy separation between
+                      // functional metadata (maker/price) and primary editorial semantic content (title).
+                      const SizedBox(height: 16),
 
                       // Specimen Title (Editorial Serif)
                       Text(

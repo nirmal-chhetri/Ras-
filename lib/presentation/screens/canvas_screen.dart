@@ -408,18 +408,24 @@ class _CanvasScreenState extends State<CanvasScreen> {
                     ),
                   )
                 else
+                  // SCIENTIFIC PRINCIPLE: Slow Technology & Motor Deceleration (Hallnäs & Redström, 2001; Mark et al., 2016)
+                  // 48px main-axis spacing and 24px cross-axis spacing introduce intentional perceptual and motor friction.
+                  // Traditional fast-commerce grids use compact 8-14px gaps to habituate compulsive, unbroken swiping.
+                  // Expanding vertical gutters to 48px forces ocular saccadic pauses and micro-reflection moments,
+                  // dismantling the passive doomscrolling feedback loop in favor of deliberate contemplative engagement.
                   SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 120),
                     sliver: SliverMasonryGrid.count(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 14,
-                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 48,
+                      crossAxisSpacing: 24,
                       itemBuilder: (context, index) {
                         final specimen = displayedSpecimens[index];
                         return SpecimenCard(
                           index: index,
                           specimen: specimen,
                           theme: theme,
+                          audioController: widget.audioController,
                           onPinToggle: () {
                             setState(() {
                               widget.repository.togglePin(specimen.id);

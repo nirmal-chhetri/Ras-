@@ -60,6 +60,12 @@ class AudioEngineController extends ChangeNotifier {
   /// The target volume level bounded in range [0.0, 1.0]. Defaults to 0.8 (80%).
   double _volume = 0.8;
 
+  /// Stored pre-attenuation volume level before acoustic ducking occurred.
+  double _preDuckVolume = 0.8;
+
+  /// Indicates whether audio is currently ducked during high-cognitive inspection tasks.
+  bool _isDucked = false;
+
   /// Indicates whether audio output is temporarily muted.
   bool _isMuted = false;
 
@@ -85,6 +91,9 @@ class AudioEngineController extends ChangeNotifier {
 
   /// True if the engine is muted.
   bool get isMuted => _isMuted;
+
+  /// True if audio is actively ducked to 20% for cognitive inspection.
+  bool get isDucked => _isDucked;
 
   /// True if awaiting a physical user click to satisfy browser audio security policies.
   bool get needsUserGesture => _needsUserGesture;
@@ -132,15 +141,15 @@ class AudioEngineController extends ChangeNotifier {
   }
 
   /// Smooth volume fader that interpolates volume across [durationMs] in discrete steps.
-  /// Prevents audio pops, clipping, or harsh digital cuts during atmosphere switches.
+  /// Prevents audio pops, clipping, or harsh digital cuts during atmosphere switches and ducking.
   Future<void> _fadeVolume({
     required double from,
     required double to,
     int durationMs = 150,
   }) async {
     if (_player == null) return;
-    const steps = 4;
-    final stepDuration = Duration(milliseconds: (durationMs / steps).round());
+    final steps = max(4, (durationMs / 35).round());
+    final stepDuration = Duration(milliseconds: max(10, (durationMs / steps).round()));
     final delta = (to - from) / steps;
 
     for (int i = 1; i <= steps; i++) {
@@ -255,6 +264,59 @@ class AudioEngineController extends ChangeNotifier {
       setVolume(0.35);
     } else {
       toggleMute();
+    }
+  }
+
+  /// PSYCHOACOUSTIC ATTENUATION & DUCKING (Phase 4)
+  /// SCIENTIFIC PRINCIPLE: Crossmodal Attention & Cognitive Load (Spence, 2011; Sweller, 2011)
+  ///
+  /// Abrupt acoustic cutoffs trigger the acoustic startle reflex (Davis, 1984),
+  /// while loud background soundscapes compete with verbal working memory during
+  /// focused monograph inspection or decision-making (Split-Attention Effect).
+  ///
+  /// This method smoothly ducks ambient sound down to [duckRatio] (default 20% / 0.20)
+  /// over [durationMs] (default 400ms), maintaining environmental immersion without
+  /// inducing startle or monopolizing cognitive bandwidth.
+  Future<void> duckAudio({double duckRatio = 0.20, int durationMs = 400}) async {
+    if (_isDucked || _isMuted) return;
+    _isDucked = true;
+    _preDuckVolume = _volume;
+    final targetDuckedVolume = (_volume * duckRatio).clamp(0.0, 1.0);
+    notifyListeners();
+
+    try {
+      if (_player != null && _isPlaying) {
+        await _fadeVolume(
+          from: _volume,
+          to: targetDuckedVolume,
+          durationMs: durationMs,
+        );
+      }
+    } catch (e) {
+      debugPrint('Acoustic ducking error: $e');
+    }
+  }
+
+  /// Restores ducked audio to its pre-attenuation level over [durationMs] (default 800ms).
+  ///
+  /// A slower ramp-up (800ms) prevents auditory intrusion when exiting focus tasks,
+  /// creating a gentle acoustic re-entry into the ambient sanctuary.
+  Future<void> restoreAudio({int durationMs = 800}) async {
+    if (!_isDucked) return;
+    _isDucked = false;
+    notifyListeners();
+
+    try {
+      if (_player != null && _isPlaying && !_isMuted) {
+        final current = _player?.volume ?? (_volume * 0.20);
+        await _fadeVolume(
+          from: current,
+          to: _preDuckVolume,
+          durationMs: durationMs,
+        );
+      }
+    } catch (e) {
+      debugPrint('Acoustic restore error: $e');
     }
   }
 
