@@ -35,14 +35,11 @@ import '../../core/gateways/provenance_gateway.dart';
 ///    Renders clean, tactile chip tags for each raw material (e.g. 'GLAZED PORCELAIN',
 ///    'KILN FIRED') and an extensive editorial narrative describing the maker's technique.
 ///
-/// 4. Atmospheric Resonance Pill:
-///    Identifies the resonant atmospheric biome with an audio waveform graphic icon.
-///
-/// 5. The Slow-Commerce Decompression Gate:
-///    Tapping "ACQUIRE SPECIMEN" does NOT launch an instant checkout or cart.
-///    Instead, it opens an intentional interstitial modal ([_showDecompressionModal])
-///    reminding the user to acquire with mindful intent before delegating to
-///    [IProvenanceGateway.launchArtisanStore] to purchase directly from the maker.
+/// 4. Direct Atelier Link Gateway:
+///    Tapping "BUY / VISIT STORE" does NOT launch a predatory cart.
+///    Instead, it opens a clean direct store redirect modal ([_showDecompressionModal])
+///    before delegating to [IProvenanceGateway.launchArtisanStore] to purchase
+///    directly from the authentic maker's website.
 /// ============================================================================
 
 /// Detailed monograph inspection screen for an artisanal design specimen.
@@ -145,7 +142,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'SLOW-COMMERCE DECOMPRESSION GATE',
+                    'DIRECT STORE LINK',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -159,7 +156,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
 
               // Title
               Text(
-                'Leaving Sanctuary for ${specimen.maker}',
+                'Visit ${specimen.maker} Store',
                 style: GoogleFonts.playfairDisplay(
                   fontSize: 23,
                   fontWeight: FontWeight.w600,
@@ -169,11 +166,10 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
               ),
               const SizedBox(height: 14),
 
-              // Philosophical slow-commerce narrative
+              // Atelier direct link narrative
               Text(
-                'Aether connects you directly to the artisan atelier in ${specimen.studioLocation}. '
-                'In the spirit of mindful living, we encourage deliberate curation over impulse consumption. '
-                'You will complete your acquisition directly with the craft house without intermediary markups.',
+                'Aether connects you directly to ${specimen.maker} in ${specimen.studioLocation}. '
+                'You will visit their official atelier store directly without intermediary markups.',
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13.5,
                   color: theme.textSecondary,
@@ -249,7 +245,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                     }
                   },
                   child: Text(
-                    'PROCEED WITH MINDFUL INTENT ➔',
+                    'VISIT OFFICIAL STORE ➔',
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
@@ -326,7 +322,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                     child: CachedNetworkImage(
                       imageUrl: specimen.imageUrl,
                       fit: BoxFit.cover,
-                      memCacheWidth: 1000,
+                      filterQuality: FilterQuality.high,
                     ),
                   ),
                   // Subtle bottom vignette gradient softening boundary
@@ -453,60 +449,9 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                       height: 1.65,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
 
-                  // Atmospheric Resonance Pill
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: theme.bgSurface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: theme.borderHairline.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.graphic_eq_rounded,
-                          size: 16,
-                          color: theme.accentGlow,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ATMOSPHERIC RESONANCE',
-                                style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 8.5,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 1.1,
-                                  color: theme.textSecondary,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                specimen.atmosphereTag
-                                    .replaceAll('_', ' ')
-                                    .toUpperCase(),
-                                style: GoogleFonts.spaceGrotesk(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  color: theme.textPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 36),
-
-                  // Acquisition Action Button (Launches Slow-Commerce Gate)
+                  // Store Action Button
                   SizedBox(
                     width: double.infinity,
                     height: 54,
@@ -524,7 +469,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                         _showDecompressionModal(context);
                       },
                       child: Text(
-                        'ACQUIRE SPECIMEN ➔',
+                        'BUY / VISIT STORE ➔',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w700,

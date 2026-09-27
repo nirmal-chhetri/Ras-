@@ -534,7 +534,7 @@ class _StudioDrawerState extends State<StudioDrawer> {
                               CachedNetworkImage(
                                 imageUrl: item.imageUrl,
                                 fit: BoxFit.cover,
-                                memCacheWidth: 600,
+                                filterQuality: FilterQuality.medium,
                               ),
                               // Bottom subtle metadata vignette
                               Positioned(

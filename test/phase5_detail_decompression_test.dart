@@ -81,7 +81,7 @@ void main() {
       expect(pinToggled, true);
     });
 
-    testWidgets('Acquire Specimen triggers Slow-Commerce Decompression Modal and executes intent', (WidgetTester tester) async {
+    testWidgets('Buy / Visit Store triggers Direct Store Modal and executes intent', (WidgetTester tester) async {
       final mockGateway = TestMockProvenanceGateway();
 
       await tester.pumpWidget(
@@ -98,21 +98,21 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
 
-      // 1. Scroll until Acquire Specimen button is visible
-      final acquireButton = find.text('ACQUIRE SPECIMEN ➔');
-      expect(acquireButton, findsOneWidget);
+      // 1. Scroll until Buy / Visit Store button is visible
+      final visitButton = find.text('BUY / VISIT STORE ➔');
+      expect(visitButton, findsOneWidget);
       await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
       await tester.pumpAndSettle();
-      await tester.tap(acquireButton);
+      await tester.tap(visitButton);
       await tester.pumpAndSettle();
 
-      // 2. Verify Decompression Modal appeared with artisan context
-      expect(find.text('SLOW-COMMERCE DECOMPRESSION GATE'), findsOneWidget);
-      expect(find.text('Leaving Sanctuary for Studio Arhoj'), findsOneWidget);
+      // 2. Verify Store Modal appeared with artisan context
+      expect(find.text('DIRECT STORE LINK'), findsOneWidget);
+      expect(find.text('Visit Studio Arhoj Store'), findsOneWidget);
       expect(find.text('https://arhoj.com'), findsOneWidget);
 
-      // 3. Confirm mindful proceed intent
-      final proceedButton = find.text('PROCEED WITH MINDFUL INTENT ➔');
+      // 3. Confirm visit official store intent
+      final proceedButton = find.text('VISIT OFFICIAL STORE ➔');
       expect(proceedButton, findsOneWidget);
       await tester.tap(proceedButton);
       await tester.pumpAndSettle();

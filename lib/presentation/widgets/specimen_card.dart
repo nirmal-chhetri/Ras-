@@ -152,7 +152,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
                         child: CachedNetworkImage(
                           imageUrl: specimen.imageUrl,
                           fit: BoxFit.cover,
-                          memCacheWidth: 750,
+                          filterQuality: FilterQuality.medium,
                           placeholder: (context, url) => Container(
                             color: theme.bgSurface,
                             child: Center(
