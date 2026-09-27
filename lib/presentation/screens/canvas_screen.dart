@@ -82,7 +82,30 @@ class _CanvasScreenState extends State<CanvasScreen> {
     _themeManager = widget.themeManager ?? ThemeManager();
     _themeManager.addListener(_onThemeChanged);
 
-    // Prime the audio engine with initial atmospheric track
+    _restoreSessionState();
+  }
+
+  /// Restores persisted atmosphere biome across browser reloads (Edge Case: Page Refresh)
+  Future<void> _restoreSessionState() async {
+    try {
+      final savedAtmos = await widget.repository.storageGateway
+          .readPreference('active_atmosphere_id');
+      if (savedAtmos != null &&
+          widget.repository.atmospheres.any((a) => a.id == savedAtmos)) {
+        if (mounted) {
+          setState(() {
+            _activeAtmosphereId = savedAtmos;
+          });
+          _themeManager.switchAtmosphere(savedAtmos);
+          final atmos = widget.repository.atmospheres
+              .firstWhere((a) => a.id == savedAtmos);
+          widget.audioController.switchAtmosphereAudio(atmos.audioTrack);
+          return;
+        }
+      }
+    } catch (_) {}
+
+    // Fallback: Prime the audio engine with default atmospheric track
     final initialAtmos = widget.repository.atmospheres.firstWhere(
       (a) => a.id == _activeAtmosphereId,
       orElse: () => widget.repository.atmospheres.first,
@@ -107,6 +130,10 @@ class _CanvasScreenState extends State<CanvasScreen> {
       _activeAtmosphereId = newId;
     });
 
+    // Persist atmosphere selection so it survives browser refresh
+    widget.repository.storageGateway
+        .persistPreference('active_atmosphere_id', newId);
+
     // Morph visual theme
     _themeManager.switchAtmosphere(newId);
 
@@ -121,6 +148,7 @@ class _CanvasScreenState extends State<CanvasScreen> {
     HapticFeedback.lightImpact();
     Navigator.of(context).push(
       PageRouteBuilder(
+        settings: const RouteSettings(name: '/studio'),
         transitionDuration: const Duration(milliseconds: 320),
         reverseTransitionDuration: const Duration(milliseconds: 260),
         pageBuilder: (context, animation, secondaryAnimation) {

@@ -533,8 +533,28 @@ class _StudioDrawerState extends State<StudioDrawer> {
                             children: [
                               CachedNetworkImage(
                                 imageUrl: item.imageUrl,
+                                memCacheWidth: 400,
+                                memCacheHeight: 400,
+                                maxWidthDiskCache: 500,
+                                maxHeightDiskCache: 500,
+                                fadeInDuration:
+                                    const Duration(milliseconds: 150),
                                 fit: BoxFit.cover,
                                 filterQuality: FilterQuality.medium,
+                                placeholder: (context, url) => Container(
+                                  color: theme.bgSurface,
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: theme.bgSurface,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.photo_outlined,
+                                      size: 20,
+                                      color: theme.textSecondary
+                                          .withValues(alpha: 0.5),
+                                    ),
+                                  ),
+                                ),
                               ),
                               // Bottom subtle metadata vignette
                               Positioned(

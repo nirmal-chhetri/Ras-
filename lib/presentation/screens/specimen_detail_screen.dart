@@ -379,7 +379,16 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                   color: Colors.white,
                 ),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                // EDGE CASE: If user reloaded the page directly on /specimen/:id,
+                // Navigator stack has no preceding route (canPop is false).
+                // Safely redirect to the discovery canvas ('/') rather than trapping the user.
+                if (Navigator.of(context).canPop()) {
+                  Navigator.of(context).pop();
+                } else {
+                  Navigator.of(context).pushReplacementNamed('/');
+                }
+              },
             ),
             actions: [
               IconButton(
@@ -410,8 +419,41 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                     tag: 'specimen_${specimen.id}',
                     child: CachedNetworkImage(
                       imageUrl: specimen.imageUrl,
+                      memCacheWidth: 1200,
+                      memCacheHeight: 1400,
+                      maxWidthDiskCache: 1200,
+                      maxHeightDiskCache: 1400,
+                      fadeInDuration: const Duration(milliseconds: 200),
                       fit: BoxFit.cover,
                       filterQuality: FilterQuality.high,
+                      placeholder: (context, url) => Container(
+                        color: theme.bgSurface,
+                        child: Center(
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: theme.borderHairline.withValues(alpha: 0.4),
+                            ),
+                            child: Icon(
+                              Icons.image_outlined,
+                              size: 18,
+                              color: theme.textSecondary.withValues(alpha: 0.45),
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: theme.bgSurface,
+                        child: Center(
+                          child: Icon(
+                            Icons.auto_awesome_mosaic_outlined,
+                            size: 48,
+                            color: theme.accentGlow.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   // Subtle bottom vignette gradient softening boundary

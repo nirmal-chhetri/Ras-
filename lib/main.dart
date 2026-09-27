@@ -4,6 +4,7 @@ import 'core/theme.dart';
 import 'core/audio_controller.dart';
 import 'data/catalog_repository.dart';
 import 'presentation/screens/canvas_screen.dart';
+import 'presentation/screens/specimen_detail_screen.dart';
 
 /// ============================================================================
 /// FILE: lib/main.dart
@@ -32,9 +33,9 @@ import 'presentation/screens/canvas_screen.dart';
 ///    Instantiates [AudioEngineController], priming the audio player and
 ///    biological waveform visualizer stream.
 ///
-/// 5. Root Material Application:
-///    Mounts [AetherApp] with the default Slate Charcoal theme and routes
-///    directly to [CanvasScreen].
+/// 5. Root Material Application & Web Deep Linking:
+///    Mounts [AetherApp] with [onGenerateRoute], supporting web browser refresh
+///    retention for '/specimen/:id' without resetting to the home canvas.
 /// ============================================================================
 
 void main() async {
@@ -85,10 +86,62 @@ class AetherApp extends StatelessWidget {
       title: 'Aether • Ambient Slow Commerce',
       debugShowCheckedModeBanner: false,
       theme: AetherTheme.slateCharcoal.toThemeData(),
-      home: CanvasScreen(
-        repository: repository,
-        audioController: audioController,
-      ),
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        var routePath = settings.name ?? '/';
+        // Normalize hash-based web URLs (e.g. '/#/specimen/spec_01' or '#/specimen/spec_01')
+        if (routePath.startsWith('/#')) {
+          routePath = routePath.substring(2);
+        } else if (routePath.startsWith('#')) {
+          routePath = routePath.substring(1);
+        }
+        if (!routePath.startsWith('/')) {
+          routePath = '/$routePath';
+        }
+
+        final uri = Uri.tryParse(routePath) ?? Uri(path: '/');
+
+        // WEB REFRESH & DEEP LINKING: /specimen/:id
+        // When the user reloads the browser while inspecting an artisanal monograph,
+        // this route generator resolves the specimen ID and restores the detail screen
+        // directly, preserving user context rather than resetting to home.
+        if (uri.pathSegments.isNotEmpty && uri.pathSegments[0] == 'specimen') {
+          final specimenId =
+              uri.pathSegments.length >= 2 ? uri.pathSegments[1] : '';
+          final matched =
+              repository.specimens.where((s) => s.id == specimenId);
+          if (matched.isNotEmpty) {
+            final specimen = matched.first;
+            return PageRouteBuilder(
+              settings: settings,
+              transitionDuration: const Duration(milliseconds: 350),
+              reverseTransitionDuration: const Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SpecimenDetailScreen(
+                    specimen: specimen,
+                    theme: AetherTheme.fromAtmosphereId(specimen.atmosphereTag),
+                    audioController: audioController,
+                    onPinToggle: () => repository.togglePin(specimen.id),
+                  ),
+                );
+              },
+            );
+          }
+        }
+
+        // Default canonical route: Discovery canvas
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return CanvasScreen(
+              repository: repository,
+              audioController: audioController,
+            );
+          },
+        );
+      },
     );
   }
 }

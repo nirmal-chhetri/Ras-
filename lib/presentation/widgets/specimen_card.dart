@@ -106,6 +106,7 @@ class _SpecimenCardState extends State<SpecimenCard> {
             HapticFeedback.lightImpact();
             Navigator.of(context).push(
               PageRouteBuilder(
+                settings: RouteSettings(name: '/specimen/${specimen.id}'),
                 transitionDuration: const Duration(milliseconds: 350),
                 reverseTransitionDuration: const Duration(milliseconds: 300),
                 pageBuilder: (context, animation, secondaryAnimation) {
@@ -160,30 +161,72 @@ class _SpecimenCardState extends State<SpecimenCard> {
                         tag: 'specimen_${specimen.id}',
                         child: CachedNetworkImage(
                           imageUrl: specimen.imageUrl,
+                          memCacheWidth: 600,
+                          memCacheHeight: 800,
+                          maxWidthDiskCache: 800,
+                          maxHeightDiskCache: 1000,
+                          fadeInDuration: const Duration(milliseconds: 200),
+                          fadeOutDuration: const Duration(milliseconds: 150),
                           fit: BoxFit.cover,
                           filterQuality: FilterQuality.medium,
                           placeholder: (context, url) => Container(
                             color: theme.bgSurface,
                             child: Center(
-                              child: SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 1.5,
-                                  color: theme.textSecondary
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: theme.borderHairline
                                       .withValues(alpha: 0.4),
+                                ),
+                                child: Icon(
+                                  Icons.image_outlined,
+                                  size: 14,
+                                  color: theme.textSecondary
+                                      .withValues(alpha: 0.45),
                                 ),
                               ),
                             ),
                           ),
                           errorWidget: (context, url, error) => Container(
                             color: theme.bgSurface,
-                            child: Center(
-                              child: Icon(
-                                Icons.broken_image_outlined,
-                                size: 24,
-                                color: theme.textSecondary,
-                              ),
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.auto_awesome_mosaic_outlined,
+                                  size: 22,
+                                  color: theme.accentGlow
+                                      .withValues(alpha: 0.7),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  specimen.maker.toUpperCase(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 8.0,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.0,
+                                    color: theme.textSecondary,
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Text(
+                                  specimen.title,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: 11.5,
+                                    fontStyle: FontStyle.italic,
+                                    color: theme.textPrimary
+                                        .withValues(alpha: 0.85),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
