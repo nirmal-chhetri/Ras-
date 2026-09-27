@@ -201,288 +201,296 @@ class _CanvasScreenState extends State<CanvasScreen> {
       curve: _themeManager.animationCurve,
       child: Scaffold(
         backgroundColor: theme.bgPrimary,
-        body: Stack(
-          children: [
-            // Primary Masonry Scroll Canvas
-            CustomScrollView(
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                // 1. Editorial Broadsheet Top Bar
-                SliverSafeArea(
-                  sliver: SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AtmosphereSelector(
-                            atmospheres: widget.repository.atmospheres,
-                            activeId: _activeAtmosphereId,
-                            theme: theme,
-                            onAtmosphereSelected: _onAtmosphereChanged,
-                          ),
-                          GestureDetector(
-                            onTap: () => _openStudioDrawer(theme),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: theme.bgSurface,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: pinnedCount > 0
-                                      ? theme.accentGlow
-                                          .withValues(alpha: 0.6)
-                                      : theme.borderHairline
-                                          .withValues(alpha: 0.8),
-                                  width: 0.8,
-                                ),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final int crossAxisCount = screenWidth >= 1400
+                ? 5
+                : screenWidth >= 1050
+                    ? 4
+                    : screenWidth >= 650
+                        ? 3
+                        : 2;
+
+            return Stack(
+              children: [
+                // Primary Masonry Scroll Canvas
+                CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    // 1. Editorial Broadsheet Top Bar
+                    SliverSafeArea(
+                      sliver: SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AtmosphereSelector(
+                                atmospheres: widget.repository.atmospheres,
+                                activeId: _activeAtmosphereId,
+                                theme: theme,
+                                onAtmosphereSelected: _onAtmosphereChanged,
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.auto_awesome_mosaic_outlined,
-                                    size: 13,
-                                    color: pinnedCount > 0
-                                        ? theme.accentGlow
-                                        : theme.textSecondary,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'STUDIO ($pinnedCount)',
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 10.0,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 1.2,
+                              GestureDetector(
+                                onTap: () => _openStudioDrawer(theme),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: theme.bgSurface,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
                                       color: pinnedCount > 0
                                           ? theme.accentGlow
-                                          : theme.textPrimary,
+                                              .withValues(alpha: 0.6)
+                                          : theme.borderHairline
+                                              .withValues(alpha: 0.8),
+                                      width: 0.8,
                                     ),
                                   ),
-                                ],
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.auto_awesome_mosaic_outlined,
+                                        size: 13,
+                                        color: pinnedCount > 0
+                                            ? theme.accentGlow
+                                            : theme.textSecondary,
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        'STUDIO ($pinnedCount)',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: 1.2,
+                                          color: pinnedCount > 0
+                                              ? theme.accentGlow
+                                              : theme.textPrimary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
 
-                // 2. Broadsheet Masthead Header
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'AETHER SANCTUARY • VOL. 01',
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.6,
-                                color: theme.textSecondary,
-                              ),
-                            ),
-                            Text(
-                              activeAtmos.telemetryFrequency.toUpperCase(),
-                              style: GoogleFonts.spaceGrotesk(
-                                fontSize: 9.0,
-                                fontWeight: FontWeight.w600,
-                                color: theme.accentGlow,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          activeAtmos.tagline,
-                          style: GoogleFonts.playfairDisplay(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
-                            color: theme.textPrimary,
-                            height: 1.25,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-
-                        // Sub-filter tabs (All vs Active Atmosphere)
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (_filterByAtmosphere) {
-                                  HapticFeedback.selectionClick();
-                                  setState(() => _filterByAtmosphere = false);
-                                }
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: !_filterByAtmosphere
-                                      ? theme.textPrimary
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: !_filterByAtmosphere
-                                        ? theme.textPrimary
-                                        : theme.borderHairline,
-                                  ),
-                                ),
-                                child: Text(
-                                  'ALL SPECIMENS (${allSpecimens.length})',
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 9.0,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 1.0,
-                                    color: !_filterByAtmosphere
-                                        ? theme.bgPrimary
-                                        : theme.textSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: () {
-                                if (!_filterByAtmosphere) {
-                                  HapticFeedback.selectionClick();
-                                  setState(() => _filterByAtmosphere = true);
-                                }
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: _filterByAtmosphere
-                                      ? theme.textPrimary
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: _filterByAtmosphere
-                                        ? theme.textPrimary
-                                        : theme.borderHairline,
-                                  ),
-                                ),
-                                child: Text(
-                                  'IN ${activeAtmos.displayName.toUpperCase()} (${atmosSpecimens.length})',
-                                  style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 9.0,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 1.0,
-                                    color: _filterByAtmosphere
-                                        ? theme.bgPrimary
-                                        : theme.textSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // 3. 2-Column Staggered Masonry Grid Feed
-                if (displayedSpecimens.isEmpty)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
+                    // 2. Broadsheet Masthead Header
+                    SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(32),
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.auto_awesome_mosaic_outlined,
-                              size: 40,
-                              color: theme.textSecondary.withValues(alpha: 0.5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'AETHER SANCTUARY • VOL. 01',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 9.5,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.6,
+                                    color: theme.textSecondary,
+                                  ),
+                                ),
+                                Text(
+                                  activeAtmos.telemetryFrequency.toUpperCase(),
+                                  style: GoogleFonts.spaceGrotesk(
+                                    fontSize: 9.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.accentGlow,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 6),
                             Text(
-                              _filterByAtmosphere
-                                  ? 'No specimens tagged for ${activeAtmos.displayName}'
-                                  : 'No specimens found',
+                              activeAtmos.tagline,
                               style: GoogleFonts.playfairDisplay(
-                                fontSize: 16,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
                                 color: theme.textPrimary,
+                                height: 1.25,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _filterByAtmosphere
-                                  ? 'Tap "ALL SPECIMENS" above to explore the entire 52-piece sanctuary.'
-                                  : 'Explore all specimens and tap the bookmark to curate your room.',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.plusJakartaSans(
-                                fontSize: 12,
-                                color: theme.textSecondary,
-                              ),
+                            const SizedBox(height: 14),
+
+                            // Sub-filter tabs (All vs Active Atmosphere)
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_filterByAtmosphere) {
+                                      HapticFeedback.selectionClick();
+                                      setState(() => _filterByAtmosphere = false);
+                                    }
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: !_filterByAtmosphere
+                                          ? theme.textPrimary
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: !_filterByAtmosphere
+                                            ? theme.textPrimary
+                                            : theme.borderHairline,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'ALL SPECIMENS (${allSpecimens.length})',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 9.0,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 1.0,
+                                        color: !_filterByAtmosphere
+                                            ? theme.bgPrimary
+                                            : theme.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (!_filterByAtmosphere) {
+                                      HapticFeedback.selectionClick();
+                                      setState(() => _filterByAtmosphere = true);
+                                    }
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: _filterByAtmosphere
+                                          ? theme.textPrimary
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: _filterByAtmosphere
+                                            ? theme.textPrimary
+                                            : theme.borderHairline,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'IN ${activeAtmos.displayName.toUpperCase()} (${atmosSpecimens.length})',
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 9.0,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 1.0,
+                                        color: _filterByAtmosphere
+                                            ? theme.bgPrimary
+                                            : theme.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
                     ),
-                  )
-                else
-                  // SCIENTIFIC PRINCIPLE: Slow Technology & Motor Deceleration (Hallnäs & Redström, 2001; Mark et al., 2016)
-                  // 48px main-axis spacing and 24px cross-axis spacing introduce intentional perceptual and motor friction.
-                  // Traditional fast-commerce grids use compact 8-14px gaps to habituate compulsive, unbroken swiping.
-                  // Expanding vertical gutters to 48px forces ocular saccadic pauses and micro-reflection moments,
-                  // dismantling the passive doomscrolling feedback loop in favor of deliberate contemplative engagement.
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 120),
-                    sliver: SliverMasonryGrid.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 48,
-                      crossAxisSpacing: 24,
-                      itemBuilder: (context, index) {
-                        final specimen = displayedSpecimens[index];
-                        return SpecimenCard(
-                          index: index,
-                          specimen: specimen,
-                          theme: theme,
-                          audioController: widget.audioController,
-                          onPinToggle: () {
-                            setState(() {
-                              widget.repository.togglePin(specimen.id);
-                            });
+
+                    // 3. Responsive Staggered Masonry Grid Feed
+                    if (displayedSpecimens.isEmpty)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.auto_awesome_mosaic_outlined,
+                                  size: 40,
+                                  color: theme.textSecondary.withValues(alpha: 0.5),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  _filterByAtmosphere
+                                      ? 'No specimens tagged for ${activeAtmos.displayName}'
+                                      : 'No specimens found',
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: 16,
+                                    color: theme.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  _filterByAtmosphere
+                                      ? 'Tap "ALL SPECIMENS" above to explore the entire 52-piece sanctuary.'
+                                      : 'Explore all specimens and tap the bookmark to curate your room.',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 12,
+                                    color: theme.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 120),
+                        sliver: SliverMasonryGrid.count(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 16,
+                          itemBuilder: (context, index) {
+                            final specimen = displayedSpecimens[index];
+                            return SpecimenCard(
+                              index: index,
+                              specimen: specimen,
+                              theme: theme,
+                              audioController: widget.audioController,
+                              onPinToggle: () {
+                                setState(() {
+                                  widget.repository.togglePin(specimen.id);
+                                });
+                              },
+                            );
                           },
-                        );
-                      },
-                      childCount: displayedSpecimens.length,
+                          childCount: displayedSpecimens.length,
+                        ),
+                      ),
+                  ],
+                ),
+
+                // Persistent Floating Sensory Audio Dock
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: SafeArea(
+                    top: false,
+                    child: AudioDock(
+                      audioController: widget.audioController,
+                      theme: theme,
+                      activeAtmosphereName: activeAtmos.displayName,
+                      telemetryFrequency: activeAtmos.telemetryFrequency,
                     ),
                   ),
-              ],
-            ),
-
-            // Persistent Floating Sensory Audio Dock
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: SafeArea(
-                top: false,
-                child: AudioDock(
-                  audioController: widget.audioController,
-                  theme: theme,
-                  activeAtmosphereName: activeAtmos.displayName,
-                  telemetryFrequency: activeAtmos.telemetryFrequency,
                 ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
