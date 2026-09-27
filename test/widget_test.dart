@@ -3,8 +3,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:aether_commerce/models/specimen.dart';
 import 'package:aether_commerce/core/theme.dart';
 
+/// ============================================================================
+/// FILE: test/widget_test.dart
+/// ARCHITECTURE LAYER: Regression & Smoke Unit Tests
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// This test file serves as a fast baseline regression and sanity check verifying:
+/// 1. Atmospheric theme resolution across all 3 curated biomes.
+/// 2. Immutability guarantees on [DesignSpecimen] copy operations.
+/// ============================================================================
+
 void main() {
-  group('Aether Ambient Slow-Commerce Unit Tests', () {
+  group('Aether Ambient Slow-Commerce Smoke & Sanity Unit Tests', () {
     test('Theme morphing resolves correct palettes across all atmospheres', () {
       final rainTheme = AetherTheme.fromAtmosphereId('rain_study');
       expect(rainTheme.id, 'rain_study');

@@ -105,13 +105,6 @@ class CatalogRepository {
     }).toList();
   }
 
-  /// Helper to clamp aspect ratio within bounds [0.75, 1.33].
-  double _clampAspectRatio(double rawRatio) {
-    if (rawRatio < 0.75) return 0.75;
-    if (rawRatio > 1.33) return 1.33;
-    return rawRatio;
-  }
-
   /// Returns specimens belonging to a specific atmosphere biome.
   List<DesignSpecimen> getByAtmosphere(String atmosphereId) {
     return _specimens
@@ -137,9 +130,11 @@ class CatalogRepository {
   }
 
   /// Adds a newly ingested user specimen to the top of the feed and pins it.
+  /// Uses [AspectRatioVerifier.verifyAndClamp] to guarantee masonry bounds [0.75, 1.33].
   void addCustomSpecimen(DesignSpecimen specimen) {
+    final verified = AspectRatioVerifier.verifyAndClamp(specimen.aspectRatio);
     final clamped = specimen.copyWith(
-      aspectRatio: _clampAspectRatio(specimen.aspectRatio),
+      aspectRatio: verified.value,
       isUserPinned: true,
     );
     _specimens.insert(0, clamped);
