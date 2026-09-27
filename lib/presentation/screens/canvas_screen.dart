@@ -74,7 +74,7 @@ class CanvasScreen extends StatefulWidget {
 class _CanvasScreenState extends State<CanvasScreen> {
   late final ThemeManager _themeManager;
   String _activeAtmosphereId = 'rain_study';
-  bool _showPinnedOnly = false;
+  bool _filterByAtmosphere = false;
 
   @override
   void initState() {
@@ -158,13 +158,13 @@ class _CanvasScreenState extends State<CanvasScreen> {
       orElse: () => widget.repository.atmospheres.first,
     );
 
-    // Apply active atmosphere filter
-    var displayedSpecimens =
+    // Display all catalog specimens by default across all modes,
+    // or optionally filter to the active atmosphere when requested.
+    final allSpecimens = widget.repository.specimens;
+    final atmosSpecimens =
         widget.repository.getByAtmosphere(_activeAtmosphereId);
-    if (_showPinnedOnly) {
-      displayedSpecimens =
-          displayedSpecimens.where((s) => s.isUserPinned).toList();
-    }
+    final displayedSpecimens =
+        _filterByAtmosphere ? atmosSpecimens : allSpecimens;
     final pinnedCount = widget.repository.pinnedSpecimens.length;
 
     return AnimatedTheme(
@@ -285,14 +285,14 @@ class _CanvasScreenState extends State<CanvasScreen> {
                         ),
                         const SizedBox(height: 14),
 
-                        // Sub-filter tabs (All vs Pinned in atmosphere)
+                        // Sub-filter tabs (All vs Active Atmosphere)
                         Row(
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (_showPinnedOnly) {
+                                if (_filterByAtmosphere) {
                                   HapticFeedback.selectionClick();
-                                  setState(() => _showPinnedOnly = false);
+                                  setState(() => _filterByAtmosphere = false);
                                 }
                               },
                               child: AnimatedContainer(
@@ -300,23 +300,23 @@ class _CanvasScreenState extends State<CanvasScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: !_showPinnedOnly
+                                  color: !_filterByAtmosphere
                                       ? theme.textPrimary
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: !_showPinnedOnly
+                                    color: !_filterByAtmosphere
                                         ? theme.textPrimary
                                         : theme.borderHairline,
                                   ),
                                 ),
                                 child: Text(
-                                  'ALL SPECIMENS',
+                                  'ALL SPECIMENS (${allSpecimens.length})',
                                   style: GoogleFonts.plusJakartaSans(
                                     fontSize: 9.0,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 1.0,
-                                    color: !_showPinnedOnly
+                                    color: !_filterByAtmosphere
                                         ? theme.bgPrimary
                                         : theme.textSecondary,
                                   ),
@@ -326,9 +326,9 @@ class _CanvasScreenState extends State<CanvasScreen> {
                             const SizedBox(width: 8),
                             GestureDetector(
                               onTap: () {
-                                if (!_showPinnedOnly) {
+                                if (!_filterByAtmosphere) {
                                   HapticFeedback.selectionClick();
-                                  setState(() => _showPinnedOnly = true);
+                                  setState(() => _filterByAtmosphere = true);
                                 }
                               },
                               child: AnimatedContainer(
@@ -336,23 +336,23 @@ class _CanvasScreenState extends State<CanvasScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: _showPinnedOnly
+                                  color: _filterByAtmosphere
                                       ? theme.textPrimary
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: _showPinnedOnly
+                                    color: _filterByAtmosphere
                                         ? theme.textPrimary
                                         : theme.borderHairline,
                                   ),
                                 ),
                                 child: Text(
-                                  'CURATED IN ATMOSPHERE',
+                                  'IN ${activeAtmos.displayName.toUpperCase()} (${atmosSpecimens.length})',
                                   style: GoogleFonts.plusJakartaSans(
                                     fontSize: 9.0,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 1.0,
-                                    color: _showPinnedOnly
+                                    color: _filterByAtmosphere
                                         ? theme.bgPrimary
                                         : theme.textSecondary,
                                   ),
@@ -377,13 +377,15 @@ class _CanvasScreenState extends State<CanvasScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.bookmark_border,
+                              Icons.auto_awesome_mosaic_outlined,
                               size: 40,
                               color: theme.textSecondary.withValues(alpha: 0.5),
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'No pinned specimens in this atmosphere',
+                              _filterByAtmosphere
+                                  ? 'No specimens tagged for ${activeAtmos.displayName}'
+                                  : 'No specimens found',
                               style: GoogleFonts.playfairDisplay(
                                 fontSize: 16,
                                 color: theme.textPrimary,
@@ -391,7 +393,9 @@ class _CanvasScreenState extends State<CanvasScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Explore all specimens and tap the bookmark to curate your room.',
+                              _filterByAtmosphere
+                                  ? 'Tap "ALL SPECIMENS" above to explore the entire 52-piece sanctuary.'
+                                  : 'Explore all specimens and tap the bookmark to curate your room.',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 12,
