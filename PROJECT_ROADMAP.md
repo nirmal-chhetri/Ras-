@@ -74,11 +74,11 @@
 
 ---
 
-### Phase 6: Personal Studio (Moodboard Drawer) & Ingestion
-- [ ] Build slide-up `StudioDrawer` displaying the user's pinned specimens in a collage layout.
-- [ ] Add "Pin" button with `HapticFeedback.mediumImpact()`.
-- [ ] Add "Add Custom Specimen" dialog with URL input.
-- **Verifier Checkpoint 6:** Offline persistence test: kill app, relaunch, verify saved pins remain intact.
+### Phase 6: Personal Studio (Moodboard Drawer) & Ingestion (COMPLETED ✅)
+- [x] Build slide-up `StudioDrawer` displaying user's pinned specimens in a 2-column moodboard collage layout with tactile unpinning.
+- [x] Implement room budget & space investment telemetry bar (Total Curated, Average Specimen Value, Total Estimated USD).
+- [x] Connect "Clip Artisan Specimen" dialog to `SpecimenIngestionPipeline` (URL validation, aspect ratio bounds repair, atmosphere auto-congruence, inline error telemetry).
+- **Verifier Checkpoint 6:** Offline persistence test in `test/phase6_studio_persistence_test.dart` passing; 23/23 tests across project passing; `dart analyze` reports 0 issues.
 
 ---
 

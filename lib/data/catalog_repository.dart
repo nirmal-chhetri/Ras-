@@ -13,12 +13,19 @@ class CatalogRepository {
   List<DesignSpecimen> get specimens => List.unmodifiable(_specimens);
   List<DesignSpecimen> get pinnedSpecimens =>
       _specimens.where((s) => _pinnedIds.contains(s.id)).toList();
+  IStorageGateway get storageGateway => _storageGateway;
 
   CatalogRepository({IStorageGateway? storageGateway})
       : _storageGateway = storageGateway ?? SharedPreferencesStorageGateway();
 
   Future<void> init() async {
     await _loadData();
+  }
+
+  void clearAllPins() {
+    _pinnedIds.clear();
+    _specimens = _specimens.map((s) => s.copyWith(isUserPinned: false)).toList();
+    _storageGateway.persistPinnedIds(_pinnedIds);
   }
 
   Future<void> _loadData() async {
