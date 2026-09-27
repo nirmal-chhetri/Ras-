@@ -19,13 +19,10 @@ import 'package:google_fonts/google_fonts.dart';
 ///    - Tabular Voice: [GoogleFonts.spaceGrotesk] (monospace/tabular numerals)
 ///      Used for telemetry frequencies, USD currency values, and technical badges.
 ///
-/// 2. THREE SYNCHRONIZED ATMOSPHERIC BIOMES:
+/// 2. SYNCHRONIZED ATMOSPHERIC BIOMES:
 ///    - Slate Charcoal ('rain_study'):
 ///      Reflective, quiet rain study. Dark slate #16181D with deep surface
-///      #1E2128 and calm blue accent #5E81AC.
-///    - Obsidian Neon ('tokyo_nocturne'):
-///      High-contrast Tokyo midnight synth. Deep pitch #0B0C10 with electric
-///      neon indigo accent #3D5AFE.
+///      #1E2128 and calm blue accent #5E81AC. (Consolidated with nocturnal themes).
 ///    - Warm Travertine ('raw_terracotta'):
 ///      Warm daylight slow living. Textured travertine #F5F2EB with sun-baked
 ///      clay/terracotta accent #C86432.

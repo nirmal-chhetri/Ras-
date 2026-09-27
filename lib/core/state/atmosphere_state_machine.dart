@@ -17,7 +17,6 @@ import '../theme.dart';
 /// STATE GRAPH ARCHITECTURE:
 /// - States:
 ///   - 'rain_study' (Slate Charcoal, rain acoustic loop, 800Hz–4kHz)
-///   - 'tokyo_nocturne' (Obsidian Neon, nocturnal drone, 60Hz sub-drone)
 ///   - 'raw_terracotta' (Warm Travertine, tape flutter, 432Hz lo-fi)
 ///
 /// - Transition Nodes:
@@ -31,8 +30,7 @@ import '../theme.dart';
 /// EXTENSION GUIDE FOR FUTURE DEVELOPERS:
 /// - To add automated circadian time triggers:
 ///   Add a periodic timer that checks `DateTime.now().hour` and automatically
-///   transitions between daylight ('raw_terracotta'), afternoon ('rain_study'),
-///   and night ('tokyo_nocturne').
+///   transitions between daylight ('raw_terracotta') and contemplative evening ('rain_study').
 /// ============================================================================
 
 /// Immutable State Schema for Graph 1 (Atmospheric State Machine).

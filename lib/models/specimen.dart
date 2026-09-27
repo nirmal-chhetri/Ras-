@@ -41,7 +41,7 @@ import 'package:flutter/foundation.dart';
 /// and telemetry metadata.
 @immutable
 class Atmosphere {
-  /// Unique identifier (e.g. 'rain_study', 'tokyo_nocturne', 'raw_terracotta').
+  /// Unique identifier (e.g. 'rain_study', 'raw_terracotta').
   final String id;
 
   /// Human-readable title displayed in the broadsheet UI and selector popup.
@@ -128,7 +128,7 @@ class DesignSpecimen {
   /// Estimated valuation in USD (avoids deceptive discount strikes).
   final double estimatedUsd;
 
-  /// Associated atmosphere tag ('rain_study', 'tokyo_nocturne', 'raw_terracotta')
+  /// Associated atmosphere tag ('rain_study', 'raw_terracotta')
   /// assigned either manually or deterministically via [CrossmodalCongruenceVerifier].
   final String atmosphereTag;
 

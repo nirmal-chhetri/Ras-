@@ -28,7 +28,7 @@ import '../core/verifiers/deterministic_verifiers.dart';
 ///
 /// 4. Sub-filtering by Atmosphere:
 ///    Provides fast, in-memory filtering of specimens by atmosphere ID
-///    ('rain_study', 'tokyo_nocturne', 'raw_terracotta') via [getByAtmosphere].
+///    ('rain_study', 'raw_terracotta') via [getByAtmosphere].
 ///
 /// EXTENSION GUIDE FOR FUTURE DEVELOPERS:
 /// - To add pagination or infinite scrolling:

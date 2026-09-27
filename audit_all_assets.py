@@ -66,7 +66,6 @@ def audit_full():
     print("\n[SECTION 2: OFFLINE AUDITORY SOUNDSCAPES (assets/audio/)]")
     audio_files = [
         ("rain_study.ogg", "Rain & Study (Wikimedia Commons Field Recording)"),
-        ("tokyo_nocturne.wav", "Tokyo Nocturne (60Hz Sub-Bass Drone + Tape Hiss)"),
         ("raw_terracotta.wav", "Raw Terracotta (174Hz Acoustic Warmth + Brown Noise)")
     ]
     for filename, desc in audio_files:

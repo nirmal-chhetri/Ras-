@@ -58,7 +58,7 @@ class ThemeManager extends ChangeNotifier {
   /// Exposes the current active [AetherTheme] tokens (colors, borders, glows).
   AetherTheme get currentTheme => _currentTheme;
 
-  /// Returns the string identifier of the current atmosphere (e.g. 'tokyo_nocturne').
+  /// Returns the string identifier of the current atmosphere (e.g. 'rain_study').
   String get activeAtmosphereId => _currentTheme.id;
 
   /// The active animation duration for theme transitions.

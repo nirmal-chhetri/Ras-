@@ -29,9 +29,8 @@ import 'dart:math' as math;
 ///
 /// 3. Verifier Gate 3: Crossmodal Audio-Visual Congruence
 ///    - Matches specimen color palettes (dominant hue degrees $[0^\circ, 360^\circ)$)
-///      and materiality keywords to one of the 3 atmospheric biomes:
+///      and materiality keywords to one of the 2 atmospheric biomes:
 ///      - $210^\circ \pm 35^\circ$ / ['rain', 'slate', 'charcoal', 'paper', 'wood'] ➔ 'rain_study'
-///      - $250^\circ \pm 35^\circ$ / ['tokyo', 'neon', 'obsidian', 'synth', 'metal'] ➔ 'tokyo_nocturne'
 ///      - $25^\circ \pm 35^\circ$ / ['terracotta', 'travertine', 'ceramic', 'warm'] ➔ 'raw_terracotta'
 ///
 /// EXTENSION GUIDE FOR FUTURE DEVELOPERS:
@@ -213,9 +212,6 @@ class AspectRatioVerifier {
 class CrossmodalCongruenceVerifier {
   /// Hue angle benchmark for Slate Charcoal (rain/desk/slate).
   static const double rainStudyHue = 210.0;
-
-  /// Hue angle benchmark for Obsidian Neon (tokyo/synth/nocturne).
-  static const double tokyoNocturneHue = 250.0;
 
   /// Hue angle benchmark for Warm Travertine (clay/ceramic/terracotta).
   static const double rawTerracottaHue = 25.0;
