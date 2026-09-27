@@ -14,7 +14,6 @@ import '../../core/theme.dart';
 /// [AtmosphereSelector] renders the tactile top-bar capsule that allows users
 /// to manually transition between atmospheric biomes:
 /// - Rain & Study (Slate Charcoal)
-/// - Tokyo Nocturne (Obsidian Neon)
 /// - Raw Terracotta (Warm Travertine)
 ///
 /// DESIGN & INTERACTION:

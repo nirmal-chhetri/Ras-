@@ -50,17 +50,17 @@ void main() {
 
     test('Atmosphere Model Invariant Mapping', () {
       const atmos = Atmosphere(
-        id: 'tokyo_nocturne',
-        displayName: 'Tokyo Nocturne',
-        tagline: 'Obsidian tech and midnight breeze',
-        audioTrack: 'assets/audio/tokyo_nocturne.wav',
-        telemetryFrequency: '60Hz Sub-Drone',
-        colorTheme: 'obsidian_neon',
+        id: 'raw_terracotta',
+        displayName: 'Raw Terracotta',
+        tagline: 'Sun-baked travertine, hand-thrown clay & linen textures',
+        audioTrack: 'assets/audio/raw_terracotta.wav',
+        telemetryFrequency: '432Hz Acoustic Tape',
+        colorTheme: 'warm_travertine',
       );
 
-      expect(atmos.id, 'tokyo_nocturne');
+      expect(atmos.id, 'raw_terracotta');
       expect(atmos.audioTrack.endsWith('.wav'), true);
-      expect(atmos.telemetryFrequency.contains('60Hz'), true);
+      expect(atmos.telemetryFrequency.contains('432Hz'), true);
     });
   });
 }

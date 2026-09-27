@@ -236,7 +236,6 @@ class CrossmodalCongruenceVerifier {
       final text = keywords.join(' ').toLowerCase();
 
       int rainScore = 0;
-      int tokyoScore = 0;
       int terracottaScore = 0;
 
       for (final kw in [
@@ -247,11 +246,7 @@ class CrossmodalCongruenceVerifier {
         'wood',
         'cast iron',
         'lamp',
-        'desk'
-      ]) {
-        if (text.contains(kw)) rainScore += 2;
-      }
-      for (final kw in [
+        'desk',
         'tokyo',
         'neon',
         'obsidian',
@@ -262,7 +257,7 @@ class CrossmodalCongruenceVerifier {
         'keyboard',
         'headphone'
       ]) {
-        if (text.contains(kw)) tokyoScore += 2;
+        if (text.contains(kw)) rainScore += 2;
       }
       for (final kw in [
         'terracotta',
@@ -278,15 +273,7 @@ class CrossmodalCongruenceVerifier {
         if (text.contains(kw)) terracottaScore += 2;
       }
 
-      if (tokyoScore > rainScore && tokyoScore > terracottaScore) {
-        return VerifierResult(
-          status: VerifierStatus.pass,
-          value: 'tokyo_nocturne',
-          telemetry:
-              'Semantic congruence matched Tokyo Nocturne (score $tokyoScore).',
-        );
-      }
-      if (terracottaScore > rainScore && terracottaScore > tokyoScore) {
+      if (terracottaScore > rainScore) {
         return VerifierResult(
           status: VerifierStatus.pass,
           value: 'raw_terracotta',
@@ -312,19 +299,9 @@ class CrossmodalCongruenceVerifier {
       }
 
       final dRain = angleDistance(dominantHueDegrees, rainStudyHue);
-      final dTokyo = angleDistance(dominantHueDegrees, tokyoNocturneHue);
       final dTerracotta = angleDistance(dominantHueDegrees, rawTerracottaHue);
 
-      final minDiff = math.min(dRain, math.min(dTokyo, dTerracotta));
-
-      if (minDiff == dTokyo) {
-        return VerifierResult(
-          status: VerifierStatus.pass,
-          value: 'tokyo_nocturne',
-          telemetry:
-              'Hue angle ${dominantHueDegrees.toStringAsFixed(1)}° matched Tokyo Nocturne.',
-        );
-      } else if (minDiff == dTerracotta) {
+      if (dTerracotta < dRain) {
         return VerifierResult(
           status: VerifierStatus.pass,
           value: 'raw_terracotta',

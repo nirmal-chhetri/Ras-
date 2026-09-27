@@ -171,12 +171,12 @@ class AtmosphereStateMachine extends ChangeNotifier {
     String audioPath = 'assets/audio/rain_study.ogg';
     String freq = '800Hz–4kHz Rain Resonance';
 
-    if (targetAtmosphereId == 'tokyo_nocturne') {
-      audioPath = 'assets/audio/tokyo_nocturne.wav';
-      freq = '60Hz Sub-Drone & Neon Pulse';
-    } else if (targetAtmosphereId == 'raw_terracotta') {
+    if (targetAtmosphereId == 'raw_terracotta') {
       audioPath = 'assets/audio/raw_terracotta.wav';
       freq = '432Hz Warm Lo-Fi Tape Flutter';
+    } else {
+      audioPath = 'assets/audio/rain_study.ogg';
+      freq = '800Hz–4kHz Rain Resonance';
     }
 
     // Node 1: Check audio conflict with external music players

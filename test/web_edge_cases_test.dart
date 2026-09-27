@@ -28,12 +28,12 @@ class TestPreferencesStorageGateway implements IStorageGateway {
           colorTheme: 'slate',
         ),
         const Atmosphere(
-          id: 'tokyo_nocturne',
-          displayName: 'Tokyo Nocturne',
-          tagline: 'Deep obsidian',
-          audioTrack: 'assets/audio/tokyo_nocturne.ogg',
+          id: 'raw_terracotta',
+          displayName: 'Raw Terracotta',
+          tagline: 'Warm travertine',
+          audioTrack: 'assets/audio/raw_terracotta.wav',
           telemetryFrequency: '432Hz',
-          colorTheme: 'obsidian',
+          colorTheme: 'warm_travertine',
         ),
       ];
 
@@ -59,7 +59,7 @@ class TestPreferencesStorageGateway implements IStorageGateway {
           maker: 'Kazuya Ishida',
           studioLocation: 'Bizen, Japan',
           estimatedUsd: 240.0,
-          atmosphereTag: 'tokyo_nocturne',
+          atmosphereTag: 'raw_terracotta',
           imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61',
           aspectRatio: 1.0,
           materialStory: 'Wood-fired unglazed stoneware bowl.',
@@ -253,8 +253,8 @@ void main() {
 
     testWidgets('Session Persistence: Active atmosphere persists across canvas screen remounts',
         (WidgetTester tester) async {
-      // 1. Manually persist Tokyo Nocturne atmosphere selection
-      await storage.persistPreference('active_atmosphere_id', 'tokyo_nocturne');
+      // 1. Manually persist Raw Terracotta atmosphere selection
+      await storage.persistPreference('active_atmosphere_id', 'raw_terracotta');
 
       // 2. Mount CanvasScreen (simulating page refresh)
       await tester.pumpWidget(
@@ -269,8 +269,8 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      // 3. Verify Tokyo Nocturne was restored on the top-bar capsule
-      expect(find.text('ATMOSPHERE: TOKYO NOCTURNE'), findsOneWidget);
+      // 3. Verify Raw Terracotta was restored on the top-bar capsule
+      expect(find.text('ATMOSPHERE: RAW TERRACOTTA'), findsOneWidget);
     });
 
     testWidgets('CachedNetworkImage in SpecimenCard enforces memory bounds',

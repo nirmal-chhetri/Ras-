@@ -13,10 +13,9 @@ import 'package:flutter/foundation.dart';
 /// 1. [Atmosphere]:
 ///    Represents a distinct sensory environment (or "biome") that synchronizes
 ///    editorial color themes, acoustic audio tracks, and telemetry frequencies.
-///    The system currently ships with three curated atmospheres:
-///    - 'rain_study': Slate Charcoal (reflective, contemplative, rain/desk)
-///    - 'tokyo_nocturne': Obsidian Neon (night-city sub-drone, electronic)
-///    - 'raw_terracotta': Warm Travertine (sun-drenched clay, lo-fi tape)
+///    The system ships with curated distinct atmospheres:
+///    - 'rain_study': Slate Charcoal (reflective, contemplative, rain/focus desk)
+///    - 'raw_terracotta': Warm Travertine (sun-drenched clay, lo-fi acoustic tape)
 ///
 /// 2. [DesignSpecimen]:
 ///    Represents an artisanal, non-mass-produced design artifact. Replaces

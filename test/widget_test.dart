@@ -22,13 +22,14 @@ void main() {
       expect(rainTheme.id, 'rain_study');
       expect(rainTheme.bgPrimary, const Color(0xFF16181D));
 
-      final obsidianTheme = AetherTheme.fromAtmosphereId('tokyo_nocturne');
-      expect(obsidianTheme.id, 'tokyo_nocturne');
-      expect(obsidianTheme.bgPrimary, const Color(0xFF0B0C10));
-
       final travertineTheme = AetherTheme.fromAtmosphereId('raw_terracotta');
       expect(travertineTheme.id, 'raw_terracotta');
       expect(travertineTheme.bgPrimary, const Color(0xFFF5F2EB));
+
+      // Consolidated tokyo_nocturne safely maps to rain_study (Slate Charcoal)
+      final fallbackTheme = AetherTheme.fromAtmosphereId('tokyo_nocturne');
+      expect(fallbackTheme.id, 'rain_study');
+      expect(fallbackTheme.bgPrimary, const Color(0xFF16181D));
     });
 
     test('Specimen copyWith maintains immutability and updates fields', () {

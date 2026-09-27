@@ -109,21 +109,7 @@ class AetherTheme {
     brightness: Brightness.dark,
   );
 
-  /// Atmosphere 2: Tokyo Nocturne (Obsidian Neon)
-  /// Midnight cyber-organic solitude, OLED pitch black, pulsing neon signage.
-  static const obsidianNeon = AetherTheme(
-    id: 'tokyo_nocturne',
-    name: 'Tokyo Nocturne',
-    bgPrimary: Color(0xFF0B0C10),
-    bgSurface: Color(0xFF14161E),
-    textPrimary: Color(0xFFEAEAEA),
-    textSecondary: Color(0xFF6B7280),
-    borderHairline: Color(0xFF1F2330),
-    accentGlow: Color(0xFF3D5AFE),
-    brightness: Brightness.dark,
-  );
-
-  /// Atmosphere 3: Raw Terracotta (Warm Travertine)
+  /// Atmosphere 2: Raw Terracotta (Warm Travertine)
   /// Afternoon Mediterranean sunshine, porous limestone, unglazed artisanal clay.
   static const warmTravertine = AetherTheme(
     id: 'raw_terracotta',
@@ -137,14 +123,16 @@ class AetherTheme {
     brightness: Brightness.light,
   );
 
+  /// Legacy alias: Tokyo Nocturne consolidated into Rain & Study to eliminate redundant dark themes.
+  static const obsidianNeon = slateCharcoal;
+
   /// Resolves an [AetherTheme] instance from an atmosphere ID string.
   /// Falls back safely to [slateCharcoal] for unrecognized or missing keys.
   static AetherTheme fromAtmosphereId(String id) {
     switch (id) {
-      case 'tokyo_nocturne':
-        return obsidianNeon;
       case 'raw_terracotta':
         return warmTravertine;
+      case 'tokyo_nocturne':
       case 'rain_study':
       default:
         return slateCharcoal;

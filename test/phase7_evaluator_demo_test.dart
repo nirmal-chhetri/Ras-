@@ -15,7 +15,7 @@ void main() {
       maker: 'Tidbyt Atelier Artisanal Electronics Studio',
       studioLocation: 'Brooklyn, New York, United States',
       estimatedUsd: 199.0,
-      atmosphereTag: 'tokyo_nocturne',
+      atmosphereTag: 'rain_study',
       imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c',
       aspectRatio: 1.0,
       materialStory: 'Enclosed in solid walnut with a matte diffusion acrylic faceplate.',
@@ -42,7 +42,7 @@ void main() {
                 width: 260,
                 child: SpecimenCard(
                   specimen: testSpecimen,
-                  theme: AetherTheme.obsidianNeon,
+                  theme: AetherTheme.slateCharcoal,
                   onPinToggle: () {},
                 ),
               ),
@@ -74,9 +74,9 @@ void main() {
           home: Scaffold(
             body: AudioDock(
               audioController: controller,
-              theme: AetherTheme.obsidianNeon,
-              activeAtmosphereName: 'Tokyo Nocturne',
-              telemetryFrequency: '60Hz Sub-Drone & Neon Pulse',
+              theme: AetherTheme.slateCharcoal,
+              activeAtmosphereName: 'Rain & Study',
+              telemetryFrequency: '800Hz–4kHz Rain Resonance',
             ),
           ),
         ),

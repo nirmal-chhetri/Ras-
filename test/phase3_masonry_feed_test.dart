@@ -15,20 +15,20 @@ void main() {
       expect(themeManager.activeAtmosphereId, 'rain_study');
       expect(themeManager.currentTheme.bgPrimary, const Color(0xFF16181D));
 
-      // 1. Switch to Tokyo Nocturne
-      themeManager.switchAtmosphere('tokyo_nocturne');
-      expect(themeManager.activeAtmosphereId, 'tokyo_nocturne');
-      expect(themeManager.currentTheme.bgPrimary, const Color(0xFF0B0C10));
-      expect(notificationCount, 1);
-
-      // 2. Switch to Raw Terracotta
+      // 1. Switch to Raw Terracotta
       themeManager.switchAtmosphere('raw_terracotta');
       expect(themeManager.activeAtmosphereId, 'raw_terracotta');
       expect(themeManager.currentTheme.bgPrimary, const Color(0xFFF5F2EB));
+      expect(notificationCount, 1);
+
+      // 2. Switch back to Rain & Study
+      themeManager.switchAtmosphere('rain_study');
+      expect(themeManager.activeAtmosphereId, 'rain_study');
+      expect(themeManager.currentTheme.bgPrimary, const Color(0xFF16181D));
       expect(notificationCount, 2);
 
       // 3. Re-switching to same atmosphere does not fire redundant notification
-      themeManager.switchAtmosphere('raw_terracotta');
+      themeManager.switchAtmosphere('rain_study');
       expect(notificationCount, 2);
     });
 

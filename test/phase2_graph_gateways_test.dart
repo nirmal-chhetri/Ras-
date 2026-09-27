@@ -163,10 +163,10 @@ void main() {
 
     test('Verifier Gate 3: Crossmodal Audio-Visual Congruency Matching', () {
       // 1. Semantic keyword matching
-      final tokyoMatch = CrossmodalCongruenceVerifier.matchAtmosphere(
+      final darkTechMatch = CrossmodalCongruenceVerifier.matchAtmosphere(
         keywords: ['OP-1', 'synthesizer', 'dark', 'neon', 'aluminum'],
       );
-      expect(tokyoMatch.value, 'tokyo_nocturne');
+      expect(darkTechMatch.value, 'rain_study');
 
       final terracottaMatch = CrossmodalCongruenceVerifier.matchAtmosphere(
         keywords: ['ceramic', 'mug', 'warm', 'travertine'],
@@ -177,8 +177,8 @@ void main() {
       final blueSlate = CrossmodalCongruenceVerifier.matchAtmosphere(dominantHueDegrees: 215.0);
       expect(blueSlate.value, 'rain_study');
 
-      final obsidianNeon = CrossmodalCongruenceVerifier.matchAtmosphere(dominantHueDegrees: 255.0);
-      expect(obsidianNeon.value, 'tokyo_nocturne');
+      final indigoSlate = CrossmodalCongruenceVerifier.matchAtmosphere(dominantHueDegrees: 255.0);
+      expect(indigoSlate.value, 'rain_study');
 
       final warmClay = CrossmodalCongruenceVerifier.matchAtmosphere(dominantHueDegrees: 30.0);
       expect(warmClay.value, 'raw_terracotta');
@@ -194,18 +194,19 @@ void main() {
       expect(stateMachine.state.activeId, 'rain_study');
       expect(audioGateway.lastPlayedAsset, 'assets/audio/rain_study.ogg');
 
-      // Transition to Tokyo Nocturne
-      await stateMachine.transitionTo('tokyo_nocturne');
-      expect(stateMachine.state.activeId, 'tokyo_nocturne');
-      expect(stateMachine.state.displayName, 'Tokyo Nocturne');
-      expect(stateMachine.state.backgroundColor, const Color(0xFF0B0C10));
-      expect(audioGateway.lastPlayedAsset, 'assets/audio/tokyo_nocturne.wav');
-
       // Transition to Raw Terracotta
       await stateMachine.transitionTo('raw_terracotta');
       expect(stateMachine.state.activeId, 'raw_terracotta');
+      expect(stateMachine.state.displayName, 'Raw Terracotta');
       expect(stateMachine.state.backgroundColor, const Color(0xFFF5F2EB));
       expect(audioGateway.lastPlayedAsset, 'assets/audio/raw_terracotta.wav');
+
+      // Transition back to Rain & Study
+      await stateMachine.transitionTo('rain_study');
+      expect(stateMachine.state.activeId, 'rain_study');
+      expect(stateMachine.state.displayName, 'Rain & Study');
+      expect(stateMachine.state.backgroundColor, const Color(0xFF16181D));
+      expect(audioGateway.lastPlayedAsset, 'assets/audio/rain_study.ogg');
     });
 
     test('Conflict Gate: External Audio Active causes Silent Theme Shift', () async {
@@ -214,8 +215,8 @@ void main() {
       await stateMachine.init();
 
       // Transition while external audio is active
-      await stateMachine.transitionTo('tokyo_nocturne');
-      expect(stateMachine.state.activeId, 'tokyo_nocturne');
+      await stateMachine.transitionTo('raw_terracotta');
+      expect(stateMachine.state.activeId, 'raw_terracotta');
       expect(stateMachine.state.isExternalAudioDetected, true);
     });
   });
