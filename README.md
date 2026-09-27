@@ -17,8 +17,13 @@ Traditional e-commerce platforms overwhelm users with tacky discount badges, cou
    - **Rain & Study (Slate Charcoal):** 800Hz–4kHz Rain field recording, contemplative desk solitude.
    - **Tokyo Nocturne (Obsidian Neon):** 60Hz Sub-drone & neon pulse, midnight OLED contrast.
    - **Raw Terracotta (Warm Travertine):** 432Hz Warm lo-fi tape flutter, Mediterranean sun-baked clay.
-3. **The Slow-Commerce Decompression Gate:** An intentional interstitial checkpoint that invites users to pause and acquire directly from independent craft makers without intermediary markups.
+3. **The Slow-Commerce Decompression Gate & Labor Illusion:** An intentional interstitial checkpoint that invites users to pause and acquire directly from independent craft makers without intermediary markups, backed by a 2000ms operational transparency verification stage (Buell & Norton, 2011; Harvard Business School).
 4. **Deterministic Engineering Invariants:** Every visual asset is mathematically bounded ($0.75 \le \text{Aspect Ratio} \le 1.33$) to guarantee zero masonry feed jitter or layout jumps.
+5. **The 4-Phase Empirical Scientific Framework:**
+   - **Phase 1 (Gestalt Spacing & Cognitive Pacing):** 24px card padding, 16px title separation, 8px hover affordance elevation, and 48px masonry gutters to break doomscroll motor loops (Wertheimer, 1923; Hallnäs & Redström, 2001).
+   - **Phase 2 (Perceived Value & Labor Illusion):** 2000ms deliberate provenance verification delay enhancing authenticity and customer satisfaction (Buell & Norton, 2011).
+   - **Phase 3 (Ergonomic Anti-Halation Contrast):** `#EAEAEA` paper silver text and `#1A1C23` surface elevation preventing retinal light scatter and ocular fatigue (Piepenbrock et al., 2014; Dobres et al., 2017) with expanded 1.5 all-caps tracking (Bringhurst, 2004; Tinker, 1963).
+   - **Phase 4 (Crossmodal Psychoacoustic Ducking):** 400ms ducking to 20% and 800ms restoration preventing acoustic startle reflex and eliminating split-attention cognitive interference (Spence, 2011; Davis, 1984; Sweller, 2011).
 
 ---
 
@@ -147,7 +152,7 @@ d:\3-1\Thinkiring Lb\
 
 ## 5. Verification & Testing
 
-### Run Automated Test Suite (26/26 Tests)
+### Run Automated Test Suite (29/29 Tests)
 ```powershell
 flutter test
 ```

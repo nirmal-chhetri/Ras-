@@ -126,5 +126,47 @@ void main() {
       // 4. Verify intent was launched via Provenance Gateway
       expect(mockGateway.lastLaunchedUrl, 'https://arhoj.com');
     });
+
+    testWidgets('Decompression Modal triggers psychoacoustic ducking and restoration', (WidgetTester tester) async {
+      final mockGateway = TestMockProvenanceGateway();
+      final audioController = AudioEngineController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SpecimenDetailScreen(
+            specimen: testSpecimen,
+            theme: AetherTheme.slateCharcoal,
+            onPinToggle: () {},
+            provenanceGateway: mockGateway,
+            audioController: audioController,
+          ),
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(audioController.isDucked, false);
+
+      // 1. Scroll and open modal
+      final visitButton = find.text('BUY / VISIT STORE ➔');
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+      await tester.tap(visitButton);
+      await tester.pumpAndSettle();
+
+      // 2. Audio is ducked while modal is active
+      expect(audioController.isDucked, true);
+
+      // 3. Proceed through Labor Illusion
+      final proceedButton = find.text('VISIT OFFICIAL STORE ➔');
+      await tester.tap(proceedButton);
+      await tester.pumpAndSettle();
+
+      // 4. Modal closed, audio restored
+      expect(audioController.isDucked, false);
+
+      audioController.dispose();
+    });
   });
 }
