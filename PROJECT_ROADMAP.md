@@ -66,11 +66,11 @@
 
 ---
 
-### Phase 5: Specimen Inspector & Decompression Modal
-- [ ] Build `SpecimenDetailScreen` with full-bleed `Hero` image transition.
-- [ ] Display typographic monograph: Materials, Studio Origin, Dimensions, and Story.
-- [ ] Implement the "Decompression Modal" before opening external artisan store URLs via `url_launcher`.
-- **Verifier Checkpoint 5:** Test external intent launch and return without app reload.
+### Phase 5: Specimen Inspector & Decompression Modal (COMPLETED ✅)
+- [x] Build `SpecimenDetailScreen` with full-bleed `Hero` image transition, bottom vignette gradient, and interactive pin toggling.
+- [x] Display typographic monograph: Materials badges, Studio Origin, Estimated Value in USD, Material Craft narrative, and Atmospheric Resonance pill.
+- [x] Implement the "Slow-Commerce Decompression Modal" before opening external artisan store URLs via `IProvenanceGateway`.
+- **Verifier Checkpoint 5:** Automated test suite in `test/phase5_detail_decompression_test.dart` passing; 21/21 tests across project passing; `dart analyze` reports 0 issues.
 
 ---
 
