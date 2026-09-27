@@ -6,10 +6,57 @@ import '../../models/specimen.dart';
 import '../../core/theme.dart';
 import '../screens/specimen_detail_screen.dart';
 
+/// ============================================================================
+/// FILE: lib/presentation/widgets/specimen_card.dart
+/// ARCHITECTURE LAYER: Presentation UI Widget (Phase 3)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// [SpecimenCard] represents a single artisanal artifact within the 2-column
+/// staggered masonry feed.
+///
+/// DESIGN & BEHAVIORAL DETAILS:
+/// 1. Staggered Entrance Animation:
+///    Uses [TweenAnimationBuilder] staggered by the card's index in the grid
+///    (`Duration(milliseconds: 300 + (index % 6) * 60)`). Each card slides
+///    upwards 16px and fades from 0.0 to 1.0 opacity on first mount.
+///
+/// 2. Deterministic Aspect Ratio Clamping:
+///    Wraps the image in an [AspectRatio] widget using `specimen.aspectRatio`,
+///    which has been pre-verified by [AspectRatioVerifier] to be in [0.75, 1.33].
+///    This guarantees no layout shifts, overflow, or jumpy rendering.
+///
+/// 3. Hero Visual Continuity:
+///    The photographic canvas is tagged with `'specimen_${specimen.id}'`, creating
+///    a seamless full-bleed Hero expansion when navigating into [SpecimenDetailScreen].
+///
+/// 4. Tactile Bookmark Pin:
+///    A floating circular bookmark button in the upper-right corner allows
+///    instant one-tap curation to the user's Studio. Provides medium haptic feedback.
+///
+/// 5. Desktop/Web Hover State:
+///    [MouseRegion] listens for pointer hover to elevate shadows and accent
+///    the hairline border with [theme.accentGlow].
+///
+/// 6. Broadsheet Typography:
+///    - Maker: All-caps Plus Jakarta Sans, 9.0pt, letter-spacing 1.1.
+///    - Price: Space Grotesk, 10.5pt, bold tabular numerals.
+///    - Title: Playfair Display, 13.5pt, semi-bold editorial serif.
+/// ============================================================================
+
+/// Masonry grid card displaying an artisanal design specimen.
 class SpecimenCard extends StatefulWidget {
+  /// The domain specimen data model.
   final DesignSpecimen specimen;
+
+  /// Current visual theme tokens.
   final AetherTheme theme;
+
+  /// Callback executed when the bookmark pin is tapped.
   final VoidCallback onPinToggle;
+
+  /// Position index in the masonry grid, used to stagger entrance animations.
   final int index;
 
   const SpecimenCard({
@@ -83,7 +130,8 @@ class _SpecimenCardState extends State<SpecimenCard> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: _isHovered ? 0.18 : 0.06),
+                  color:
+                      Colors.black.withValues(alpha: _isHovered ? 0.18 : 0.06),
                   blurRadius: _isHovered ? 16 : 8,
                   offset: Offset(0, _isHovered ? 6 : 3),
                 ),
@@ -113,7 +161,8 @@ class _SpecimenCardState extends State<SpecimenCard> {
                                 height: 16,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 1.5,
-                                  color: theme.textSecondary.withValues(alpha: 0.4),
+                                  color: theme.textSecondary
+                                      .withValues(alpha: 0.4),
                                 ),
                               ),
                             ),

@@ -5,10 +5,52 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme.dart';
 import '../../core/audio_controller.dart';
 
+/// ============================================================================
+/// FILE: lib/presentation/widgets/audio_dock.dart
+/// ARCHITECTURE LAYER: Presentation UI Widget (Phase 4)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// [AudioDock] is the signature acoustic telemetry dock anchored at the bottom
+/// of the viewport. It provides the tactile controls for ambient soundscapes
+/// and visually communicates the acoustic resonance of the sanctuary.
+///
+/// KEY COMPONENTS:
+/// 1. Frosted Glass Capsule:
+///    Uses [BackdropFilter] with [ImageFilter.blur] (sigmaX: 14, sigmaY: 14) and
+///    a rounded capsule border (radius 100).
+///
+/// 2. Performance Isolation:
+///    Wrapped in a [RepaintBoundary] so the high-frequency (60Hz) visualizer
+///    waveform repaints do not trigger unnecessary repaints of the underlying
+///    complex masonry image grid.
+///
+/// 3. Autoplay Recovery State ("CLICK TO TUNE IN"):
+///    When web browsers reject initial automated audio (`needsUserGesture == true`),
+///    the dock's play button and label glow with [theme.accentGlow], inviting the
+///    user to click to begin playback without blocking the rest of the app.
+///
+/// 4. Custom Waveform Visualizer ([_WaveformPainter]):
+///    Dynamically computes frequency bar heights across the capsule width,
+///    shading the center bars with atmospheric accent glow.
+///
+/// 5. Volume Preset Cycling:
+///    Tapping the volume button cycles presets: `100% -> 70% -> 35% -> Muted -> 100%`.
+/// ============================================================================
+
+/// Persistent floating frosted-glass capsule for audio playback, telemetry, and volume.
 class AudioDock extends StatefulWidget {
+  /// The audio controller driving playback and the visualizer stream.
   final AudioEngineController audioController;
+
+  /// Current visual theme tokens for coloring the dock and waveform.
   final AetherTheme theme;
+
+  /// Name of the active atmosphere (e.g. "RAIN & STUDY").
   final String activeAtmosphereName;
+
+  /// Acoustic frequency telemetry string (e.g. "800Hz–4kHz Rain Resonance").
   final String telemetryFrequency;
 
   const AudioDock({
@@ -49,6 +91,7 @@ class _AudioDockState extends State<AudioDock> {
     setState(() {});
   }
 
+  /// Selects the appropriate Material volume icon based on volume level and mute state.
   IconData _getVolumeIcon() {
     final controller = widget.audioController;
     if (controller.isMuted || controller.volume == 0.0) {
@@ -96,7 +139,7 @@ class _AudioDockState extends State<AudioDock> {
             padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Row(
               children: [
-                // 1. Play / Pause / Tune-in Button
+                // 1. Play / Pause / Tune-in Action Button
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
@@ -115,7 +158,9 @@ class _AudioDockState extends State<AudioDock> {
                             : theme.textPrimary.withValues(alpha: 0.12),
                       ),
                       child: Icon(
-                        isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                        isPlaying
+                            ? Icons.pause_rounded
+                            : Icons.play_arrow_rounded,
                         size: 20,
                         color: needsGesture || isPlaying
                             ? Colors.white
@@ -147,7 +192,7 @@ class _AudioDockState extends State<AudioDock> {
                 ),
                 const SizedBox(width: 10),
 
-                // 3. Volume Preset Cycle Button
+                // 3. Volume Preset Cycle Button (100% -> 70% -> 35% -> Muted)
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
@@ -186,7 +231,8 @@ class _AudioDockState extends State<AudioDock> {
                         fontSize: 9.0,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.1,
-                        color: needsGesture ? theme.accentGlow : theme.textPrimary,
+                        color:
+                            needsGesture ? theme.accentGlow : theme.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -209,6 +255,7 @@ class _AudioDockState extends State<AudioDock> {
   }
 }
 
+/// Custom painter rendering organic audio visualizer bars.
 class _WaveformPainter extends CustomPainter {
   final double amplitude;
   final bool isPlaying;
@@ -234,12 +281,14 @@ class _WaveformPainter extends CustomPainter {
       final heightMultiplier = (1.0 - factor * 0.42);
 
       final barHeight = isPlaying
-          ? (size.height * 0.82 * amplitude * heightMultiplier).clamp(2.5, size.height - 2)
+          ? (size.height * 0.82 * amplitude * heightMultiplier)
+              .clamp(2.5, size.height - 2)
           : 2.5;
 
       final isCenter = (i >= barCount / 3) && (i <= 2 * barCount / 3);
       final paint = Paint()
-        ..color = (isCenter && isPlaying ? accentColor : primaryColor).withValues(alpha: 0.75)
+        ..color = (isCenter && isPlaying ? accentColor : primaryColor)
+            .withValues(alpha: 0.75)
         ..strokeWidth = 2.0
         ..strokeCap = StrokeCap.round;
 

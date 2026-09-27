@@ -6,10 +6,57 @@ import '../../models/specimen.dart';
 import '../../core/theme.dart';
 import '../../core/gateways/provenance_gateway.dart';
 
+/// ============================================================================
+/// FILE: lib/presentation/screens/specimen_detail_screen.dart
+/// ARCHITECTURE LAYER: Presentation Screen (Phase 5)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// [SpecimenDetailScreen] provides a contemplative, monograph-style visual
+/// deep-dive into an individual artisanal specimen.
+///
+/// ANTI-FAST-COMMERCE PHILOSOPHY:
+/// - Replaces aggressive checkout countdowns, "hurry only 2 left" artificial
+///   scarcity badges, and star ratings with respectful maker provenance,
+///   studio geography, and deep materiality storytelling.
+///
+/// KEY COMPONENTS:
+/// 1. Full-Bleed Hero SliverAppBar:
+///    Smoothly expands to 480px height. Seamlessly links to [SpecimenCard]'s
+///    Hero tag (`'specimen_${specimen.id}'`) for flawless visual continuity.
+///    Features a subtle linear vignette gradient at the base to soften the transition.
+///
+/// 2. Origin & Valuation Telemetry:
+///    Displays the artisan's studio location (e.g. 'STUDIO ARHOJ • COPENHAGEN, DENMARK')
+///    alongside the unadulterated valuation in USD.
+///
+/// 3. Materiality Badges & Craft Story:
+///    Renders clean, tactile chip tags for each raw material (e.g. 'GLAZED PORCELAIN',
+///    'KILN FIRED') and an extensive editorial narrative describing the maker's technique.
+///
+/// 4. Atmospheric Resonance Pill:
+///    Identifies the resonant atmospheric biome with an audio waveform graphic icon.
+///
+/// 5. The Slow-Commerce Decompression Gate:
+///    Tapping "ACQUIRE SPECIMEN" does NOT launch an instant checkout or cart.
+///    Instead, it opens an intentional interstitial modal ([_showDecompressionModal])
+///    reminding the user to acquire with mindful intent before delegating to
+///    [IProvenanceGateway.launchArtisanStore] to purchase directly from the maker.
+/// ============================================================================
+
+/// Detailed monograph inspection screen for an artisanal design specimen.
 class SpecimenDetailScreen extends StatefulWidget {
+  /// The specimen being inspected.
   final DesignSpecimen specimen;
+
+  /// Current visual theme tokens.
   final AetherTheme theme;
+
+  /// Callback to toggle the pinned curation state in the parent catalog.
   final VoidCallback onPinToggle;
+
+  /// Provenance gateway for validating and launching external artisan stores.
   final IProvenanceGateway? provenanceGateway;
 
   const SpecimenDetailScreen({
@@ -32,9 +79,11 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
   void initState() {
     super.initState();
     _isPinned = widget.specimen.isUserPinned;
-    _provenanceGateway = widget.provenanceGateway ?? UrlLauncherProvenanceGateway();
+    _provenanceGateway =
+        widget.provenanceGateway ?? UrlLauncherProvenanceGateway();
   }
 
+  /// Toggles the local and parent pin state with medium haptic feedback.
   void _handlePinToggle() {
     HapticFeedback.mediumImpact();
     setState(() {
@@ -43,6 +92,10 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
     widget.onPinToggle();
   }
 
+  /// Displays the Slow-Commerce Decompression Gate interstitial modal.
+  ///
+  /// Intercepts impulsive buying impulses by providing a moment of mindful
+  /// pause and redirecting the user directly to the artisan's independent shop.
   void _showDecompressionModal(BuildContext context) {
     final theme = widget.theme;
     final specimen = widget.specimen;
@@ -131,7 +184,8 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
 
               // Direct link badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: theme.bgPrimary,
                   borderRadius: BorderRadius.circular(8),
@@ -141,7 +195,8 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.lock_outline_rounded, size: 14, color: theme.textSecondary),
+                    Icon(Icons.lock_outline_rounded,
+                        size: 14, color: theme.textSecondary),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -159,7 +214,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Action button
+              // Action button to external artisan store
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -174,9 +229,11 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                   ),
                   onPressed: () async {
                     Navigator.of(modalContext).pop();
-                    final canLaunch = await _provenanceGateway.canLaunchArtisanStore(specimen.provenanceUrl);
+                    final canLaunch = await _provenanceGateway
+                        .canLaunchArtisanStore(specimen.provenanceUrl);
                     if (canLaunch) {
-                      await _provenanceGateway.launchArtisanStore(specimen.provenanceUrl);
+                      await _provenanceGateway
+                          .launchArtisanStore(specimen.provenanceUrl);
                     } else {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -272,7 +329,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                       memCacheWidth: 1000,
                     ),
                   ),
-                  // Subtle bottom vignette gradient
+                  // Subtle bottom vignette gradient softening boundary
                   Positioned(
                     left: 0,
                     right: 0,
@@ -330,7 +387,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                   ),
                   const SizedBox(height: 10),
 
-                  // Display Title
+                  // Display Title (Editorial Serif)
                   Text(
                     specimen.title,
                     style: GoogleFonts.playfairDisplay(
@@ -349,7 +406,8 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                     runSpacing: 8,
                     children: specimen.materials.map((mat) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: theme.bgSurface,
                           borderRadius: BorderRadius.circular(4),
@@ -399,7 +457,8 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
 
                   // Atmospheric Resonance Pill
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
                       color: theme.bgSurface,
                       borderRadius: BorderRadius.circular(8),
@@ -430,7 +489,9 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                specimen.atmosphereTag.replaceAll('_', ' ').toUpperCase(),
+                                specimen.atmosphereTag
+                                    .replaceAll('_', ' ')
+                                    .toUpperCase(),
                                 style: GoogleFonts.spaceGrotesk(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
@@ -445,7 +506,7 @@ class _SpecimenDetailScreenState extends State<SpecimenDetailScreen> {
                   ),
                   const SizedBox(height: 36),
 
-                  // Acquisition Action Button
+                  // Acquisition Action Button (Launches Slow-Commerce Gate)
                   SizedBox(
                     width: double.infinity,
                     height: 54,

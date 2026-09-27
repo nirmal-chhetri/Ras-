@@ -11,9 +11,53 @@ import '../widgets/specimen_card.dart';
 import '../widgets/audio_dock.dart';
 import 'studio_drawer.dart';
 
+/// ============================================================================
+/// FILE: lib/presentation/screens/canvas_screen.dart
+/// ARCHITECTURE LAYER: Presentation Screen (Phase 3)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// [CanvasScreen] is the primary visual exploration surface of Aether. It presents
+/// the curated Slow-Commerce catalog in a high-density, editorial 2-column
+/// staggered masonry layout.
+///
+/// KEY ARCHITECTURAL FEATURES:
+/// 1. Synchronized Sensory Control:
+///    Connecting [AtmosphereSelector] directly with [ThemeManager] and
+///    [AudioEngineController]. Selecting a new atmosphere morphs the color
+///    theme and initiates stepped audio crossfading to the matching acoustic loop.
+///
+/// 2. Broadsheet Editorial Masthead:
+///    Displays volume edition numbers ("VOL. 01"), evocative poetic taglines
+///    in Playfair Display, and live tabular frequency badges in Space Grotesk.
+///
+/// 3. Atmospheric Sub-Filtering:
+///    Allows toggling between "ALL SPECIMENS" and "CURATED IN ATMOSPHERE"
+///    (displaying only specimens that the user has pinned within that active biome).
+///
+/// 4. 2-Column Staggered Masonry Grid:
+///    Uses [SliverMasonryGrid.count] from `flutter_staggered_grid_view`. Aspect
+///    ratios of all tiles are bounded by [0.75, 1.33], preventing extreme vertical
+///    or horizontal tile outliers.
+///
+/// 5. Persistent Floating Sensory Audio Dock:
+///    Anchors [AudioDock] over the bottom scroll view with 110px padding to
+///    prevent the last grid row from being obscured.
+///
+/// 6. Studio Drawer Sheet Transition:
+///    Slides up the personal curation studio via a smooth 320ms cubic animation.
+/// ============================================================================
+
+/// The primary discovery canvas displaying broadsheet editorials, masonry feed, and audio dock.
 class CanvasScreen extends StatefulWidget {
+  /// The single source of truth for specimens, atmospheres, and pin states.
   final CatalogRepository repository;
+
+  /// The audio engine driving soundscapes and telemetry.
   final AudioEngineController audioController;
+
+  /// Optional theme manager (instantiated by default if omitted).
   final ThemeManager? themeManager;
 
   const CanvasScreen({
@@ -56,17 +100,23 @@ class _CanvasScreenState extends State<CanvasScreen> {
     setState(() {});
   }
 
+  /// Handles manual user atmosphere selection from [AtmosphereSelector].
   void _onAtmosphereChanged(String newId) {
     if (_activeAtmosphereId == newId) return;
     setState(() {
       _activeAtmosphereId = newId;
     });
 
+    // Morph visual theme
     _themeManager.switchAtmosphere(newId);
-    final atmos = widget.repository.atmospheres.firstWhere((a) => a.id == newId);
+
+    // Crossfade acoustic audio loop
+    final atmos =
+        widget.repository.atmospheres.firstWhere((a) => a.id == newId);
     widget.audioController.switchAtmosphereAudio(atmos.audioTrack);
   }
 
+  /// Opens the [StudioDrawer] moodboard as a bottom slide transition.
   void _openStudioDrawer(AetherTheme theme) {
     HapticFeedback.lightImpact();
     Navigator.of(context).push(
@@ -78,7 +128,8 @@ class _CanvasScreenState extends State<CanvasScreen> {
             position: Tween<Offset>(
               begin: const Offset(0, 1),
               end: Offset.zero,
-            ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
+            ).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
             child: StudioDrawer(
               pinnedSpecimens: widget.repository.pinnedSpecimens,
               theme: theme,
@@ -107,9 +158,12 @@ class _CanvasScreenState extends State<CanvasScreen> {
       orElse: () => widget.repository.atmospheres.first,
     );
 
-    var displayedSpecimens = widget.repository.getByAtmosphere(_activeAtmosphereId);
+    // Apply active atmosphere filter
+    var displayedSpecimens =
+        widget.repository.getByAtmosphere(_activeAtmosphereId);
     if (_showPinnedOnly) {
-      displayedSpecimens = displayedSpecimens.where((s) => s.isUserPinned).toList();
+      displayedSpecimens =
+          displayedSpecimens.where((s) => s.isUserPinned).toList();
     }
     final pinnedCount = widget.repository.pinnedSpecimens.length;
 
@@ -143,14 +197,17 @@ class _CanvasScreenState extends State<CanvasScreen> {
                             onTap: () => _openStudioDrawer(theme),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
                               decoration: BoxDecoration(
                                 color: theme.bgSurface,
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: pinnedCount > 0
-                                      ? theme.accentGlow.withValues(alpha: 0.6)
-                                      : theme.borderHairline.withValues(alpha: 0.8),
+                                      ? theme.accentGlow
+                                          .withValues(alpha: 0.6)
+                                      : theme.borderHairline
+                                          .withValues(alpha: 0.8),
                                   width: 0.8,
                                 ),
                               ),
@@ -160,7 +217,9 @@ class _CanvasScreenState extends State<CanvasScreen> {
                                   Icon(
                                     Icons.auto_awesome_mosaic_outlined,
                                     size: 13,
-                                    color: pinnedCount > 0 ? theme.accentGlow : theme.textSecondary,
+                                    color: pinnedCount > 0
+                                        ? theme.accentGlow
+                                        : theme.textSecondary,
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
@@ -169,7 +228,9 @@ class _CanvasScreenState extends State<CanvasScreen> {
                                       fontSize: 10.0,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 1.2,
-                                      color: pinnedCount > 0 ? theme.accentGlow : theme.textPrimary,
+                                      color: pinnedCount > 0
+                                          ? theme.accentGlow
+                                          : theme.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -236,7 +297,8 @@ class _CanvasScreenState extends State<CanvasScreen> {
                               },
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: !_showPinnedOnly
                                       ? theme.textPrimary
@@ -271,7 +333,8 @@ class _CanvasScreenState extends State<CanvasScreen> {
                               },
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: _showPinnedOnly
                                       ? theme.textPrimary

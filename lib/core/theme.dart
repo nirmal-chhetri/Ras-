@@ -1,15 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// ============================================================================
+/// FILE: lib/core/theme.dart
+/// ARCHITECTURE LAYER: Design System & Visual Token Foundation (Phase 0, 1 & 3)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// This file implements the three synchronized atmospheric design themes and
+/// dual typographic voices defined in the Aether Design System specification:
+///
+/// 1. DUAL TYPOGRAPHIC VOICE:
+///    - Editorial Voice: [GoogleFonts.playfairDisplay] (classic serif)
+///      Used for masthead headlines, poetic taglines, and specimen titles.
+///    - Functional Voice: [GoogleFonts.plusJakartaSans] (clean grotesk)
+///      Used for body text, navigation tabs, maker signatures, and UI labels.
+///    - Tabular Voice: [GoogleFonts.spaceGrotesk] (monospace/tabular numerals)
+///      Used for telemetry frequencies, USD currency values, and technical badges.
+///
+/// 2. THREE SYNCHRONIZED ATMOSPHERIC BIOMES:
+///    - Slate Charcoal ('rain_study'):
+///      Reflective, quiet rain study. Dark slate #16181D with deep surface
+///      #1E2128 and calm blue accent #5E81AC.
+///    - Obsidian Neon ('tokyo_nocturne'):
+///      High-contrast Tokyo midnight synth. Deep pitch #0B0C10 with electric
+///      neon indigo accent #3D5AFE.
+///    - Warm Travertine ('raw_terracotta'):
+///      Warm daylight slow living. Textured travertine #F5F2EB with sun-baked
+///      clay/terracotta accent #C86432.
+///
+/// 3. MODERN FLUTTER COMPATIBILITY:
+///    - Uses Material 3 (`useMaterial3: true`).
+///    - Avoids deprecated `Color.withOpacity(alpha)` in favor of
+///      `Color.withValues(alpha: alpha)` introduced in Flutter 3.27+.
+///
+/// EXTENSION GUIDE FOR FUTURE DEVELOPERS:
+/// - To add a 4th Atmosphere theme (e.g. Nordic Moss / Forest Solitude):
+///   1. Declare a `static const AetherTheme nordicMoss = AetherTheme(...)` below.
+///   2. Map its id in [AetherTheme.fromAtmosphereId].
+///   3. Update [AtmosphereStateMachine] and [DATA_CATALOG.json].
+/// ============================================================================
+
+/// Represents a sensory visual color and typography system.
 class AetherTheme {
+  /// Unique theme key matching the atmosphere ID.
   final String id;
+
+  /// Display name of the theme shown in settings or inspectors.
   final String name;
+
+  /// Primary canvas background color (deep tone in dark mode, creamy in light).
   final Color bgPrimary;
+
+  /// Elevated card, modal bottom sheet, and dock container surface color.
   final Color bgSurface;
+
+  /// High-contrast primary text color for headlines and titles.
   final Color textPrimary;
+
+  /// Low-contrast secondary text color for body narratives and maker captions.
   final Color textSecondary;
+
+  /// Hairline structural border color for cards, dividers, and capsules.
   final Color borderHairline;
+
+  /// Atmospheric accent glow used for active tabs, waveforms, and callouts.
   final Color accentGlow;
+
+  /// Brightness mode (Brightness.dark or Brightness.light).
   final Brightness brightness;
 
   const AetherTheme({
@@ -24,7 +83,12 @@ class AetherTheme {
     required this.brightness,
   });
 
-  // 1. Rain & Study (Slate Charcoal)
+  // ===========================================================================
+  // ATMOSPHERIC PRESETS
+  // ===========================================================================
+
+  /// Atmosphere 1: Rain & Study (Slate Charcoal)
+  /// Ambient rain, wet slate cobblestones, contemplative reading desk.
   static const slateCharcoal = AetherTheme(
     id: 'rain_study',
     name: 'Rain & Study',
@@ -37,7 +101,8 @@ class AetherTheme {
     brightness: Brightness.dark,
   );
 
-  // 2. Tokyo Nocturne (Obsidian Neon)
+  /// Atmosphere 2: Tokyo Nocturne (Obsidian Neon)
+  /// Midnight cyber-organic solitude, OLED pitch black, pulsing neon signage.
   static const obsidianNeon = AetherTheme(
     id: 'tokyo_nocturne',
     name: 'Tokyo Nocturne',
@@ -50,7 +115,8 @@ class AetherTheme {
     brightness: Brightness.dark,
   );
 
-  // 3. Raw Terracotta (Warm Travertine)
+  /// Atmosphere 3: Raw Terracotta (Warm Travertine)
+  /// Afternoon Mediterranean sunshine, porous limestone, unglazed artisanal clay.
   static const warmTravertine = AetherTheme(
     id: 'raw_terracotta',
     name: 'Raw Terracotta',
@@ -63,6 +129,8 @@ class AetherTheme {
     brightness: Brightness.light,
   );
 
+  /// Resolves an [AetherTheme] instance from an atmosphere ID string.
+  /// Falls back safely to [slateCharcoal] for unrecognized or missing keys.
   static AetherTheme fromAtmosphereId(String id) {
     switch (id) {
       case 'tokyo_nocturne':
@@ -75,6 +143,11 @@ class AetherTheme {
     }
   }
 
+  /// Converts this custom atmospheric token set into a standard Flutter [ThemeData].
+  ///
+  /// This bridges our custom tokens with Flutter's widget tree so standard
+  /// components (Scaffolds, Tooltips, Dividers) automatically inherit the
+  /// active atmosphere's aesthetic.
   ThemeData toThemeData() {
     return ThemeData(
       useMaterial3: true,
@@ -83,7 +156,7 @@ class AetherTheme {
       cardColor: bgSurface,
       dividerColor: borderHairline,
       textTheme: TextTheme(
-        // Editorial Serif for headers
+        // Editorial Serif typography for broadsheet masthead and title banners
         displayLarge: GoogleFonts.playfairDisplay(
           fontSize: 32,
           fontWeight: FontWeight.w600,
@@ -101,7 +174,8 @@ class AetherTheme {
           fontStyle: FontStyle.italic,
           color: textPrimary,
         ),
-        // Functional Grotesque for UI & descriptions
+
+        // Functional Grotesk typography for body text, story narratives, and UI
         bodyLarge: GoogleFonts.plusJakartaSans(
           fontSize: 15,
           fontWeight: FontWeight.w400,
@@ -114,7 +188,8 @@ class AetherTheme {
           color: textSecondary,
           height: 1.4,
         ),
-        // Uppercase labels
+
+        // Tabular uppercase labels for telemetry badges, filters, and maker tags
         labelLarge: GoogleFonts.plusJakartaSans(
           fontSize: 12,
           fontWeight: FontWeight.w600,

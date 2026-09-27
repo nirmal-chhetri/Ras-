@@ -9,12 +9,61 @@ import '../../core/gateways/provenance_gateway.dart';
 import '../../core/pipelines/ingestion_pipeline.dart';
 import 'specimen_detail_screen.dart';
 
+/// ============================================================================
+/// FILE: lib/presentation/screens/studio_drawer.dart
+/// ARCHITECTURE LAYER: Presentation Screen (Phase 6)
+/// PROJECT: Aether • Ākāśa (आकाश) — Ambient Slow-Commerce & Sensory Sanctuary
+/// ============================================================================
+///
+/// OVERVIEW:
+/// [StudioDrawer] represents the user's private, personal curation workspace.
+/// Rather than an ephemeral "shopping cart," the Studio is a physical moodboard
+/// where curated artifacts are assembled into an envisioned living or working room.
+///
+/// KEY FEATURES & METRICS:
+/// 1. Space Investment Telemetry Bar:
+///    Computes and displays real-time financial telemetry for the envisioned room:
+///    - Total curated specimen count
+///    - Average investment per piece ($Total / N$)
+///    - Estimated Space Investment in USD
+///
+/// 2. 2-Column Moodboard Collage:
+///    Renders pinned specimens in an elegant 2-column grid (childAspectRatio: 0.78)
+///    with bottom vignette metadata.
+///
+/// 3. Tactile Unpin Gesture Handling:
+///    Each moodboard tile includes a top-right 'X' button configured with
+///    [HitTestBehavior.opaque] and a unique `Key('unpin_${item.id}')` to ensure
+///    taps on the unpin button never trigger accidental card navigation taps.
+///
+/// 4. Ingestion Pipeline Dialog ("Clip Artisan Specimen"):
+///    Allows users to paste arbitrary web URLs or custom artisan creations.
+///    Invokes [SpecimenIngestionPipeline.ingest] to validate URL syntax,
+///    assert resolution/aspect ratio bounds, and automatically assign the
+///    specimen to the most congruent atmospheric biome.
+///
+/// 5. Studio Clearing:
+///    Includes a confirmation dialog ([_confirmClearAll]) to safely wipe the canvas.
+/// ============================================================================
+
+/// Personal studio moodboard sheet for organizing, evaluating, and clipping specimens.
 class StudioDrawer extends StatefulWidget {
+  /// The list of specimens currently pinned to the user's studio.
   final List<DesignSpecimen> pinnedSpecimens;
+
+  /// Current visual theme tokens.
   final AetherTheme theme;
+
+  /// Callback invoked when a specimen is unpinned.
   final Function(String) onUnpin;
+
+  /// Callback invoked when a newly clipped custom specimen is added.
   final Function(DesignSpecimen) onAddCustom;
+
+  /// Optional callback to clear all pinned items simultaneously.
   final VoidCallback? onClearAll;
+
+  /// Optional custom ingestion pipeline for testing or dependency injection.
   final SpecimenIngestionPipeline? ingestionPipeline;
 
   const StudioDrawer({
@@ -44,6 +93,7 @@ class _StudioDrawerState extends State<StudioDrawer> {
         );
   }
 
+  /// Displays the interactive "Clip Artisan Specimen" dialog connected to [SpecimenIngestionPipeline].
   void _showAddCustomDialog(BuildContext context) {
     final titleController = TextEditingController();
     final makerController = TextEditingController();
@@ -68,7 +118,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
               ),
               title: Row(
                 children: [
-                  Icon(Icons.add_link_rounded, size: 18, color: theme.accentGlow),
+                  Icon(Icons.add_link_rounded,
+                      size: 18, color: theme.accentGlow),
                   const SizedBox(width: 8),
                   Text(
                     'CLIP ARTISAN SPECIMEN',
@@ -100,11 +151,17 @@ class _StudioDrawerState extends State<StudioDrawer> {
                       style: TextStyle(color: theme.textPrimary, fontSize: 13),
                       decoration: InputDecoration(
                         labelText: 'Image CDN or Artisan Web Link *',
-                        labelStyle: TextStyle(color: theme.textSecondary, fontSize: 12),
+                        labelStyle: TextStyle(
+                            color: theme.textSecondary, fontSize: 12),
                         hintText: 'https://...',
-                        hintStyle: TextStyle(color: theme.textSecondary.withValues(alpha: 0.5), fontSize: 11),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.borderHairline)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.accentGlow)),
+                        hintStyle: TextStyle(
+                            color: theme.textSecondary.withValues(alpha: 0.5),
+                            fontSize: 11),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.borderHairline)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: theme.accentGlow)),
                       ),
                     ),
                     TextField(
@@ -112,9 +169,13 @@ class _StudioDrawerState extends State<StudioDrawer> {
                       style: TextStyle(color: theme.textPrimary, fontSize: 13),
                       decoration: InputDecoration(
                         labelText: 'Specimen Name *',
-                        labelStyle: TextStyle(color: theme.textSecondary, fontSize: 12),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.borderHairline)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.accentGlow)),
+                        labelStyle: TextStyle(
+                            color: theme.textSecondary, fontSize: 12),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.borderHairline)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: theme.accentGlow)),
                       ),
                     ),
                     TextField(
@@ -122,9 +183,13 @@ class _StudioDrawerState extends State<StudioDrawer> {
                       style: TextStyle(color: theme.textPrimary, fontSize: 13),
                       decoration: InputDecoration(
                         labelText: 'Artisan / Studio (e.g. Studio Arhoj)',
-                        labelStyle: TextStyle(color: theme.textSecondary, fontSize: 12),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.borderHairline)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.accentGlow)),
+                        labelStyle: TextStyle(
+                            color: theme.textSecondary, fontSize: 12),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.borderHairline)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: theme.accentGlow)),
                       ),
                     ),
                     TextField(
@@ -133,11 +198,17 @@ class _StudioDrawerState extends State<StudioDrawer> {
                       style: TextStyle(color: theme.textPrimary, fontSize: 13),
                       decoration: InputDecoration(
                         labelText: 'Estimated Value (USD)',
-                        labelStyle: TextStyle(color: theme.textSecondary, fontSize: 12),
+                        labelStyle: TextStyle(
+                            color: theme.textSecondary, fontSize: 12),
                         hintText: '150',
-                        hintStyle: TextStyle(color: theme.textSecondary.withValues(alpha: 0.5), fontSize: 11),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.borderHairline)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: theme.accentGlow)),
+                        hintStyle: TextStyle(
+                            color: theme.textSecondary.withValues(alpha: 0.5),
+                            fontSize: 11),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.borderHairline)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: theme.accentGlow)),
                       ),
                     ),
                     if (validationError != null) ...[
@@ -163,35 +234,41 @@ class _StudioDrawerState extends State<StudioDrawer> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(dialogCtx).pop(),
-                  child: Text('CANCEL', style: TextStyle(color: theme.textSecondary, fontSize: 11)),
+                  child: Text('CANCEL',
+                      style:
+                          TextStyle(color: theme.textSecondary, fontSize: 11)),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.textPrimary,
                     foregroundColor: theme.bgPrimary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6)),
                   ),
                   onPressed: () async {
                     final rawUrl = urlController.text.trim();
                     final rawTitle = titleController.text.trim();
 
                     if (rawTitle.isEmpty) {
-                      setDialogState(() => validationError = 'Specimen Name is required.');
+                      setDialogState(
+                          () => validationError = 'Specimen Name is required.');
                       return;
                     }
 
-                    // Ingest via Pipeline
+                    // Ingest through deterministic pipeline
                     final result = await _ingestionPipeline.ingest(
                       rawUrl: rawUrl.isEmpty
                           ? 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c'
                           : rawUrl,
                       title: rawTitle,
                       maker: makerController.text.trim(),
-                      estimatedUsd: double.tryParse(priceController.text.trim()) ?? 150.0,
+                      estimatedUsd:
+                          double.tryParse(priceController.text.trim()) ?? 150.0,
                     );
 
                     if (!result.isSuccess) {
-                      setDialogState(() => validationError = result.errorMessage ?? 'Ingestion failed.');
+                      setDialogState(() => validationError =
+                          result.errorMessage ?? 'Ingestion failed.');
                       return;
                     }
 
@@ -200,7 +277,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                   },
                   child: Text(
                     'INGEST SPECIMEN',
-                    style: GoogleFonts.plusJakartaSans(fontSize: 11, fontWeight: FontWeight.w700),
+                    style: GoogleFonts.plusJakartaSans(
+                        fontSize: 11, fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -211,6 +289,7 @@ class _StudioDrawerState extends State<StudioDrawer> {
     );
   }
 
+  /// Displays a confirmation dialog before wiping the studio canvas.
   void _confirmClearAll(BuildContext context) {
     showDialog(
       context: context,
@@ -232,7 +311,9 @@ class _StudioDrawerState extends State<StudioDrawer> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text('CANCEL', style: TextStyle(color: widget.theme.textSecondary, fontSize: 11)),
+            child: Text('CANCEL',
+                style: TextStyle(
+                    color: widget.theme.textSecondary, fontSize: 11)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -243,7 +324,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
               Navigator.of(ctx).pop();
               widget.onClearAll?.call();
             },
-            child: const Text('CLEAR ALL', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+            child: const Text('CLEAR ALL',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -254,7 +336,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
   Widget build(BuildContext context) {
     final theme = widget.theme;
     final pinned = widget.pinnedSpecimens;
-    final totalVal = pinned.fold<double>(0.0, (sum, item) => sum + item.estimatedUsd);
+    final totalVal =
+        pinned.fold<double>(0.0, (sum, item) => sum + item.estimatedUsd);
     final avgVal = pinned.isEmpty ? 0.0 : totalVal / pinned.length;
 
     return Scaffold(
@@ -278,12 +361,14 @@ class _StudioDrawerState extends State<StudioDrawer> {
         actions: [
           if (pinned.isNotEmpty && widget.onClearAll != null)
             IconButton(
-              icon: Icon(Icons.delete_sweep_outlined, size: 19, color: theme.textSecondary),
+              icon: Icon(Icons.delete_sweep_outlined,
+                  size: 19, color: theme.textSecondary),
               tooltip: 'Clear Studio',
               onPressed: () => _confirmClearAll(context),
             ),
           IconButton(
-            icon: Icon(Icons.add_circle_outline_rounded, size: 20, color: theme.accentGlow),
+            icon: Icon(Icons.add_circle_outline_rounded,
+                size: 20, color: theme.accentGlow),
             tooltip: 'Clip from Web',
             onPressed: () => _showAddCustomDialog(context),
           ),
@@ -326,12 +411,14 @@ class _StudioDrawerState extends State<StudioDrawer> {
                       style: OutlinedButton.styleFrom(
                         foregroundColor: theme.textPrimary,
                         side: BorderSide(color: theme.borderHairline),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
                       ),
                       icon: Icon(Icons.add, size: 14, color: theme.accentGlow),
                       label: Text(
                         'CLIP WEB SPECIMEN',
-                        style: GoogleFonts.plusJakartaSans(fontSize: 10.5, fontWeight: FontWeight.w700),
+                        style: GoogleFonts.plusJakartaSans(
+                            fontSize: 10.5, fontWeight: FontWeight.w700),
                       ),
                       onPressed: () => _showAddCustomDialog(context),
                     ),
@@ -343,11 +430,14 @@ class _StudioDrawerState extends State<StudioDrawer> {
               children: [
                 // Room Budget Telemetry Bar
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
                     color: theme.bgSurface,
                     border: Border(
-                      bottom: BorderSide(color: theme.borderHairline.withValues(alpha: 0.6)),
+                      bottom: BorderSide(
+                          color:
+                              theme.borderHairline.withValues(alpha: 0.6)),
                     ),
                   ),
                   child: Row(
@@ -406,7 +496,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                 Expanded(
                   child: GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
@@ -432,7 +523,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                             color: theme.bgSurface,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: theme.borderHairline.withValues(alpha: 0.8),
+                              color: theme.borderHairline
+                                  .withValues(alpha: 0.8),
                             ),
                           ),
                           clipBehavior: Clip.antiAlias,
@@ -450,7 +542,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                                 right: 0,
                                 bottom: 0,
                                 child: Container(
-                                  padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 20, 8, 8),
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       begin: Alignment.topCenter,
@@ -462,7 +555,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
@@ -490,7 +584,7 @@ class _StudioDrawerState extends State<StudioDrawer> {
                                   ),
                                 ),
                               ),
-                              // Unpin 'X' action
+                              // Unpin 'X' action with opaque hit test behavior
                               Positioned(
                                 top: 6,
                                 right: 6,
@@ -504,7 +598,8 @@ class _StudioDrawerState extends State<StudioDrawer> {
                                   child: Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withValues(alpha: 0.55),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.55),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(
