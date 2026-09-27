@@ -58,11 +58,11 @@
 
 ---
 
-### Phase 4: Sensory Audio Dock & Visualizer
-- [ ] Build floating `AudioDock` capsule widget at bottom with frosted glass `BackdropFilter`.
-- [ ] Build live `CustomPainter` waveform rendering the simulated sound amplitude stream.
-- [ ] Implement volume toggle, pause/play, and atmosphere telemetry display.
-- **Verifier Checkpoint 4:** Test background looping and volume crossfade without UI frame drops.
+### Phase 4: Sensory Audio Dock & Visualizer (COMPLETED ✅)
+- [x] Build floating `AudioDock` capsule widget at bottom with frosted glass `BackdropFilter` (sigma 14), play/tune-in pulse button, and telemetry block.
+- [x] Build live `_WaveformPainter` dual-tone frequency bars reacting to live amplitude stream and theme accent glow.
+- [x] Implement multi-stage volume cycle preset (100% -> 70% -> 35% -> Muted -> 100%), pause/play, stepped volume crossfade, and web autoplay gesture handling (`NotAllowedError` recovery).
+- **Verifier Checkpoint 4:** Automated test suite in `test/phase4_audio_dock_test.dart` passing; 19/19 tests across project passing; `dart analyze` reports 0 issues.
 
 ---
 
