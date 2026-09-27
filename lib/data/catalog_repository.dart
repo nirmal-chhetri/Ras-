@@ -1,9 +1,10 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/specimen.dart';
+import '../core/gateways/storage_gateway.dart';
+import '../core/verifiers/deterministic_verifiers.dart';
 
 class CatalogRepository {
+  final IStorageGateway _storageGateway;
+
   List<Atmosphere> _atmospheres = [];
   List<DesignSpecimen> _specimens = [];
   final Set<String> _pinnedIds = {};
@@ -13,56 +14,38 @@ class CatalogRepository {
   List<DesignSpecimen> get pinnedSpecimens =>
       _specimens.where((s) => _pinnedIds.contains(s.id)).toList();
 
-  static const String _pinnedStorageKey = 'aether_pinned_specimen_ids';
+  CatalogRepository({IStorageGateway? storageGateway})
+      : _storageGateway = storageGateway ?? SharedPreferencesStorageGateway();
 
   Future<void> init() async {
-    await _loadSavedPins();
-    await _loadCatalogJson();
+    await _loadData();
   }
 
-  Future<void> _loadSavedPins() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final saved = prefs.getStringList(_pinnedStorageKey) ?? [];
-      _pinnedIds.addAll(saved);
-    } catch (_) {
-      // Memory fallback if storage unavailable
-    }
-  }
+  Future<void> _loadData() async {
+    // 1. Load saved pinned IDs
+    final savedPins = await _storageGateway.loadPinnedIds();
+    _pinnedIds.clear();
+    _pinnedIds.addAll(savedPins);
 
-  Future<void> _persistPins() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setStringList(_pinnedStorageKey, _pinnedIds.toList());
-    } catch (_) {}
-  }
+    // 2. Load atmospheres
+    _atmospheres = await _storageGateway.loadAtmospheres();
 
-  Future<void> _loadCatalogJson() async {
-    try {
-      final jsonStr = await rootBundle.loadString('DATA_CATALOG.json');
-      final data = json.decode(jsonStr) as Map<String, dynamic>;
+    // 3. Load base specimens
+    final baseSpecimens = await _storageGateway.loadBaseCatalog();
 
-      _atmospheres = (data['atmospheres'] as List<dynamic>)
-          .map((a) => Atmosphere.fromJson(a as Map<String, dynamic>))
-          .toList();
+    // 4. Load user custom curated specimens
+    final customSpecimens = await _storageGateway.loadCustomSpecimens();
 
-      final rawSpecimens = (data['specimens'] as List<dynamic>)
-          .map((s) => DesignSpecimen.fromJson(s as Map<String, dynamic>))
-          .toList();
-
-      // Apply Deterministic Aspect Ratio Clamping Verifier
-      _specimens = rawSpecimens.map((specimen) {
-        final clampedRatio = _clampAspectRatio(specimen.aspectRatio);
-        final isPinned = _pinnedIds.contains(specimen.id);
-        return specimen.copyWith(
-          aspectRatio: clampedRatio,
-          isUserPinned: isPinned,
-        );
-      }).toList();
-    } catch (e) {
-      // Fallback seed if asset loading fails
-      _specimens = [];
-    }
+    // 5. Apply Deterministic Verifier Gate 2 (Aspect Ratio Clamping)
+    final allRaw = [...customSpecimens, ...baseSpecimens];
+    _specimens = allRaw.map((specimen) {
+      final verified = AspectRatioVerifier.verifyAndClamp(specimen.aspectRatio);
+      final isPinned = _pinnedIds.contains(specimen.id);
+      return specimen.copyWith(
+        aspectRatio: verified.value,
+        isUserPinned: isPinned,
+      );
+    }).toList();
   }
 
   // Verifier Gate 2: Enforce Aspect Ratio Bounds [0.75, 1.33]
@@ -90,7 +73,7 @@ class CatalogRepository {
       }
       return s;
     }).toList();
-    _persistPins();
+    _storageGateway.persistPinnedIds(_pinnedIds);
   }
 
   void addCustomSpecimen(DesignSpecimen specimen) {
@@ -100,6 +83,7 @@ class CatalogRepository {
     );
     _specimens.insert(0, clamped);
     _pinnedIds.add(clamped.id);
-    _persistPins();
+    _storageGateway.persistPinnedIds(_pinnedIds);
+    _storageGateway.saveCustomSpecimen(clamped);
   }
 }

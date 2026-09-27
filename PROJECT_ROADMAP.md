@@ -29,28 +29,24 @@
 
 ---
 
-### Phase 1: Environment & Scaffolding
-- [ ] Verify Flutter SDK in PATH (`flutter doctor`).
-- [ ] Initialize clean Flutter skeleton: `flutter create --org com.aether.commerce --platforms=android,ios,windows .`
-- [ ] Populate `pubspec.yaml` with core dependencies:
-  - `just_audio: ^0.9.36`
-  - `audio_session: ^0.1.18`
-  - `flutter_staggered_grid_view: ^0.7.0`
-  - `cached_network_image: ^3.3.1`
-  - `google_fonts: ^6.1.0`
-  - `hive_flutter: ^1.1.0`
-  - `url_launcher: ^6.2.4`
-- [ ] Download and bundle 3 offline CC0 ambient audio loops into `assets/audio/`.
-- **Verifier Checkpoint 1:** `flutter analyze` passes with 0 errors; asset bundling verified.
+### Phase 1: Environment & Scaffolding (COMPLETED ✅)
+- [x] Verify Flutter SDK in PATH (`flutter doctor`).
+- [x] Initialize clean Flutter skeleton: `flutter create --org com.aether.commerce --platforms=windows,web .`
+- [x] Populate `pubspec.yaml` with core dependencies (staggered grid, cached network image, google fonts, just_audio, audio_session, url_launcher, shared_preferences, cupertino_icons).
+- [x] Download and bundle 3 offline ambient audio loops into `assets/audio/` (rain_study.ogg, tokyo_nocturne.wav, raw_terracotta.wav).
+- **Verifier Checkpoint 1:** `dart analyze` passes with 0 errors; asset bundling verified via `flutter build bundle` and `verify_resources.py`.
 
 ---
 
-### Phase 2: State Graph & Semantic Gateways
-- [ ] Implement `AtmosphereState` and `AtmosphereCubit` / `ChangeNotifier`.
-- [ ] Implement `IStorageGateway` with Hive local database persistence for user pins.
-- [ ] Implement `IAudioGateway` with `just_audio` loop points.
-- [ ] Implement `CatalogRepository` parsing `assets/data/catalog.json`.
-- **Verifier Checkpoint 2:** Unit test verifying catalog parsing and aspect ratio clamping assertions.
+### Phase 2: State Graph & Semantic Gateways (COMPLETED ✅)
+- [x] Implement `AtmosphereState` schema & `AtmosphereStateMachine` (Graph 1: Atmospheric State Machine with audio conflict check).
+- [x] Implement `IAudioGateway` and `JustAudioGateway` isolating `just_audio` and `audio_session`.
+- [x] Implement `IStorageGateway` and `SharedPreferencesStorageGateway` persisting pinned items and custom curations.
+- [x] Implement `IProvenanceGateway` and `UrlLauncherProvenanceGateway` for external atelier validation.
+- [x] Implement Deterministic Verifier Gates 1, 2, and 3 (`VisualResolutionVerifier`, `AspectRatioVerifier`, `CrossmodalCongruenceVerifier`).
+- [x] Implement `SpecimenIngestionPipeline` (Graph 2: Ingestion & Curation Pipeline).
+- [x] Wire `CatalogRepository` to `IStorageGateway` and `AspectRatioVerifier`.
+- **Verifier Checkpoint 2:** Full test suite in `test/phase2_graph_gateways_test.dart` passing 8/8 tests; 13/13 tests across project passing; `dart analyze` reports 0 issues.
 
 ---
 
