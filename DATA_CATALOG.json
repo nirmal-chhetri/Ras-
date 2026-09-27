@@ -1,0 +1,162 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-09-26T22:49:00Z",
+  "atmospheres": [
+    {
+      "id": "rain_study",
+      "displayName": "Rain & Study",
+      "tagline": "Analog tools, slate shadows & focused silence",
+      "audioTrack": "assets/audio/rain_study.ogg",
+      "telemetryFrequency": "432Hz Pink Noise",
+      "colorTheme": "slate_charcoal"
+    },
+    {
+      "id": "tokyo_nocturne",
+      "displayName": "Tokyo Nocturne",
+      "tagline": "Obsidian tech, modular synthesis & midnight breeze",
+      "audioTrack": "assets/audio/tokyo_nocturne.wav",
+      "telemetryFrequency": "60Hz Sub-Drone",
+      "colorTheme": "obsidian_neon"
+    },
+    {
+      "id": "raw_terracotta",
+      "displayName": "Raw Terracotta",
+      "tagline": "Sun-baked travertine, hand-thrown clay & linen textures",
+      "audioTrack": "assets/audio/raw_terracotta.wav",
+      "telemetryFrequency": "250Hz Acoustic Tape",
+      "colorTheme": "warm_travertine"
+    }
+  ],
+  "specimens": [
+    {
+      "id": "spec_01",
+      "title": "Cast Iron Angle Desk Lamp",
+      "maker": "Studio Arhoj",
+      "studioLocation": "Copenhagen, Denmark",
+      "estimatedUsd": 165.0,
+      "atmosphereTag": "rain_study",
+      "imageUrl": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.82,
+      "materialStory": "Solid cast iron base with matte graphite powder coating. Incorporates a stepped brass rotational dimmer with a 2700K warm diffused LED emitter.",
+      "provenanceUrl": "https://arhoj.com",
+      "materials": ["Cast Iron", "Spun Brass", "Diffused Glass"]
+    },
+    {
+      "id": "spec_02",
+      "title": "Q1 Custom Mechanical Keyboard",
+      "maker": "Keychron Atelier",
+      "studioLocation": "Hong Kong",
+      "estimatedUsd": 210.0,
+      "atmosphereTag": "rain_study",
+      "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 1.05,
+      "materialStory": "Full CNC-machined 6063 aluminum body with double-gasket acoustic dampening. Fitted with factory-lubricated tactile switches and matte PBT dye-sub keycaps.",
+      "provenanceUrl": "https://keychron.com",
+      "materials": ["Anodized Aluminum", "FR4 Plate", "PBT Polymer"]
+    },
+    {
+      "id": "spec_03",
+      "title": "Hardbound Stone Paper Journal",
+      "maker": "Karst Stone Paper",
+      "studioLocation": "Sydney, Australia",
+      "estimatedUsd": 38.0,
+      "atmosphereTag": "rain_study",
+      "imageUrl": "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.88,
+      "materialStory": "Manufactured without trees or water using calcium carbonate repurposed from limestone quarry waste. 100% waterproof and friction-free glide.",
+      "provenanceUrl": "https://karststonepaper.com",
+      "materials": ["Recycled Calcium Carbonate", "Linen Spine"]
+    },
+    {
+      "id": "spec_04",
+      "title": "Minimalist Dark Oak Studio Desk",
+      "maker": "Artifox Studio",
+      "studioLocation": "St. Louis, USA",
+      "estimatedUsd": 1450.0,
+      "atmosphereTag": "rain_study",
+      "imageUrl": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 1.25,
+      "materialStory": "Solid American black walnut with integrated magnetic cord management channel and powder-coated steel hardware.",
+      "provenanceUrl": "https://theartifox.com",
+      "materials": ["Solid White Oak", "Cast Aluminum", "Felt"]
+    },
+    {
+      "id": "spec_05",
+      "title": "OP-1 Field Portable Synthesizer",
+      "maker": "Teenage Engineering",
+      "studioLocation": "Stockholm, Sweden",
+      "estimatedUsd": 1999.0,
+      "atmosphereTag": "tokyo_nocturne",
+      "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.95,
+      "materialStory": "Ultra-slim anodized aluminum chassis with custom color-coded encoders and a 24-bit stereo sound engine. 100 internal synth models.",
+      "provenanceUrl": "https://teenage.engineering",
+      "materials": ["Anodized Aluminum", "High-Density Polymer", "Glass"]
+    },
+    {
+      "id": "spec_06",
+      "title": "Matte Aluminum Headphone Monolith",
+      "maker": "Room's Audio Line",
+      "studioLocation": "Tuttlingen, Germany",
+      "estimatedUsd": 120.0,
+      "atmosphereTag": "tokyo_nocturne",
+      "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.85,
+      "materialStory": "Architectural curved stand providing ergonomic pressure distribution across headphone headbands. Weighted rubberized non-slip footpad.",
+      "provenanceUrl": "https://www.rooms-audio-line.de",
+      "materials": ["Oiled Walnut", "Matte Silicone", "Stainless Steel"]
+    },
+    {
+      "id": "spec_07",
+      "title": "Monochrome OLED Telemetry Clock",
+      "maker": "Tidbyt Atelier",
+      "studioLocation": "San Francisco, USA",
+      "estimatedUsd": 189.0,
+      "atmosphereTag": "tokyo_nocturne",
+      "imageUrl": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 1.15,
+      "materialStory": "Pixel-display console housed in solid plantation walnut. Displays realtime weather, transit telemetry, and ambient circadian indicators.",
+      "provenanceUrl": "https://tidbyt.com",
+      "materials": ["Natural Walnut", "LED Matrix", "Frosted Acrylic"]
+    },
+    {
+      "id": "spec_08",
+      "title": "Hand-Thrown Hasami Ceramic Mug",
+      "maker": "Hasami Porcelain",
+      "studioLocation": "Nagasaki, Japan",
+      "estimatedUsd": 45.0,
+      "atmosphereTag": "raw_terracotta",
+      "imageUrl": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.84,
+      "materialStory": "Crafted from crushed porcelain stone mixed with local clay using 400-year-old traditional techniques. Unglazed exterior with organic granular tactile finish.",
+      "provenanceUrl": "https://hasami-porcelain.com",
+      "materials": ["Crushed Stone Porcelain", "Clay Blend"]
+    },
+    {
+      "id": "spec_09",
+      "title": "Honed Travertine Catchall Platter",
+      "maker": "Kalon Studios",
+      "studioLocation": "Los Angeles, USA",
+      "estimatedUsd": 130.0,
+      "atmosphereTag": "raw_terracotta",
+      "imageUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 1.02,
+      "materialStory": "Carved from a single block of natural Roman travertine. Features unfilled porous textures finished with organic beeswax sealant.",
+      "provenanceUrl": "https://kalonstudios.com",
+      "materials": ["Italian Travertine Stone", "Beeswax Sealant"]
+    },
+    {
+      "id": "spec_10",
+      "title": "Solid Beech Sculptural Lounge Chair",
+      "maker": "Fredericia",
+      "studioLocation": "Copenhagen, Denmark",
+      "estimatedUsd": 1250.0,
+      "atmosphereTag": "raw_terracotta",
+      "imageUrl": "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=700&q=80",
+      "aspectRatio": 0.78,
+      "materialStory": "Designed by Børge Mogensen. Hand-stretched saddle leather seat combined with solid European beech timber aged over 12 months.",
+      "provenanceUrl": "https://fredericia.com",
+      "materials": ["Solid Beech", "Vegetable-Tanned Saddle Leather"]
+    }
+  ]
+}
